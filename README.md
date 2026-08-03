@@ -9,10 +9,11 @@ git clone https://github.com/rhkss8/solomon-clean.git
 cd solomon-clean
 nvm install
 nvm use
-npm ci
+corepack enable
+pnpm install --frozen-lockfile
 cp .env.example .env
 zsh scripts/install-project-codex.zsh
-npm run dev
+pnpm dev
 ```
 
 그다음 상태를 확인합니다.
@@ -32,17 +33,17 @@ TARS 기준으로 현재 상태를 확인하고 다음 todo를 이어서 진행�
 ## 명령
 
 ```bash
-npm run dev
-npm run typecheck
-npm run lint
-npm run test
-npm run build
+pnpm dev
+pnpm typecheck
+pnpm lint
+pnpm test
+pnpm build
 ./tars handoff
 ```
 
 ## 환경변수
 
-실제 키와 연락처는 `.env`에만 저장하고 커밋하지 않습니다. 새 컴퓨터에서는 `.env.example`을 복사한 후 로컬 값을 입력합니다.
+실제 키와 연락처는 `.env`에만 저장하고 커밋하지 않습니다. 새 컴퓨터에서는 `.env.example`을 복사한 후 로컬 값을 입력합니다. 개발 서버는 `http://localhost:3002`에서 실행됩니다.
 
 ## 작업 종료와 이동
 
