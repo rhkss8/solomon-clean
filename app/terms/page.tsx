@@ -1,0 +1,1 @@
+export default function TermsPage(){return <main><section className="page-hero"><div className="container narrow"><span className="eyebrow">POLICY</span><h1>이용약관</h1><p>서비스 신청, 견적, 작업 범위와 이용 조건에 맞춰 정식 약관을 반영합니다.</p></div></section></main>}

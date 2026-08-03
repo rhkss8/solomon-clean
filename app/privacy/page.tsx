@@ -1,0 +1,1 @@
+export default function PrivacyPage(){return <main><section className="page-hero"><div className="container narrow"><span className="eyebrow">POLICY</span><h1>개인정보처리방침</h1><p>실제 견적 저장·전송 방식 확정 후 수집 항목, 이용 목적, 보유기간과 위탁사를 반영합니다.</p></div></section></main>}

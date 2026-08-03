@@ -1,0 +1,1 @@
+export default function RefundPage(){return <main><section className="page-hero"><div className="container narrow"><span className="eyebrow">POLICY</span><h1>예약·환불규정</h1><p>예약금, 일정 변경, 작업 취소 기준을 실제 운영정책에 맞춰 반영합니다.</p></div></section></main>}
