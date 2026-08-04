@@ -125,6 +125,7 @@ h1, h2, h3, p { margin-top: 0; }
 .process-grid span { color: var(--brand-primary); font-size: 12px; font-weight: 850; }
 .process-grid h3 { margin-top: 50px; }
 .centered-action { margin-top: 38px; text-align: center; }
+.feed-notice { margin-top: 16px; color: var(--red); font-size: 14px; }
 .estimate-form { display: grid; gap: 22px; }
 .estimate-form label { display: grid; gap: 8px; font-weight: 700; }
 .estimate-form input, .estimate-form select, .estimate-form textarea { width: 100%; padding: 14px 15px; background: white; border: 1px solid #c9cdd1; border-radius: 6px; outline: none; }

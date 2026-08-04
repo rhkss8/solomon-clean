@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { BlogPostGrid } from "@/src/components/BlogPostGrid";
 import { ServiceGrid } from "@/src/components/ServiceGrid";
 import { StructuredData } from "@/src/components/StructuredData";
-import { observedBlogPosts, services, siteConfig } from "@/src/domain/site";
+import { services, siteConfig } from "@/src/domain/site";
 import { createPageMetadata } from "@/src/lib/metadata";
+import { getBlogPosts } from "@/src/server/blog-feed";
 
 export const metadata = createPageMetadata({
   title: "전국 종합청소·폐기물 처리 무료견적",
@@ -10,7 +12,8 @@ export const metadata = createPageMetadata({
   path: "/",
 });
 
-export default function HomePage() {
+export default async function HomePage() {
+  const { posts } = await getBlogPosts(3);
   return (
     <main>
       <StructuredData
@@ -135,14 +138,7 @@ export default function HomePage() {
               네이버 블로그 보기 →
             </a>
           </div>
-          <div className="post-grid">
-            {observedBlogPosts.map((post) => (
-              <a className="post-card" href={post.href} key={post.href} rel="noreferrer" target="_blank">
-                <div className="post-card__placeholder"><span>{post.category}</span></div>
-                <div><small>{post.date}</small><h3>{post.title}</h3><span className="text-link">작업내용 보기 →</span></div>
-              </a>
-            ))}
-          </div>
+          <BlogPostGrid posts={posts} />
         </div>
       </section>
 
