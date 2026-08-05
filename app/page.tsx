@@ -22,6 +22,8 @@ export default async function HomePage() {
           "@type": "LocalBusiness",
           name: siteConfig.name,
           url: siteConfig.url,
+          telephone: siteConfig.phone,
+          email: siteConfig.email,
           areaServed: { "@type": "Country", name: "대한민국" },
           description: siteConfig.description,
           sameAs: [siteConfig.blogUrl],

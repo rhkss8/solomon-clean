@@ -10,9 +10,10 @@ export const siteConfig = {
   description:
     "입주·이사·상업공간·특수청소와 폐기물 처리까지 전국에서 상담할 수 있는 종합청소 서비스입니다.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://solomon-clean.example.com",
-  phone: process.env.NEXT_PUBLIC_PHONE ?? "",
+  phone: process.env.NEXT_PUBLIC_PHONE ?? "01052071642",
   kakaoUrl: process.env.NEXT_PUBLIC_KAKAO_URL ?? "",
-  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "",
+  kakaoId: process.env.NEXT_PUBLIC_KAKAO_ID ?? "schoo88",
+  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "school88@nate.com",
   blogUrl: "https://blog.naver.com/solomon_clean",
   rssUrl: "https://rss.blog.naver.com/solomon_clean.xml",
   serviceArea: "전국",
@@ -22,6 +23,13 @@ export const siteConfig = {
     logoDarkSrc: "/brand/logo-dark.svg",
   },
 } as const;
+
+/** Formats a Korean mobile number for human-readable contact surfaces. */
+export function formatPhoneNumber(phone: string) {
+  const digits = phone.replace(/\D/g, "");
+  const match = digits.match(/^(01\d)(\d{3,4})(\d{4})$/);
+  return match ? `${match[1]}-${match[2]}-${match[3]}` : phone;
+}
 
 export type ServiceCategory =
   | "residential"

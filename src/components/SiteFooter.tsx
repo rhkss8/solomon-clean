@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { navigation, siteConfig } from "@/src/domain/site";
+import { formatPhoneNumber, navigation, siteConfig } from "@/src/domain/site";
 import { BrandLogo } from "./BrandLogo";
 
 /** Shared business identity and policy navigation. */
@@ -10,7 +10,10 @@ export function SiteFooter() {
         <div>
           <BrandLogo inverse />
           <p>{siteConfig.description}</p>
-          <p className="footer-note">전국 상담 · 실제 운영정보는 오픈 전 반영됩니다.</p>
+          <p className="footer-note">전국 상담</p>
+          <a href={`tel:${siteConfig.phone}`}>전화 {formatPhoneNumber(siteConfig.phone)}</a>
+          <a href={`mailto:${siteConfig.email}`}>이메일 {siteConfig.email}</a>
+          <span>카카오톡 ID {siteConfig.kakaoId}</span>
         </div>
         <div>
           <strong>바로가기</strong>
