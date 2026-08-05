@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { BlogPostGrid } from "@/src/components/BlogPostGrid";
 import { ServiceGrid } from "@/src/components/ServiceGrid";
@@ -16,7 +15,6 @@ export const metadata = createPageMetadata({
 
 export default async function HomePage() {
   const { posts } = await getBlogPosts(3);
-  const featuredPost = posts.find((post) => post.imageUrl);
   return (
     <main>
       <StructuredData
@@ -49,14 +47,11 @@ export default async function HomePage() {
               <li>서비스별 전문 작업</li>
             </ul>
           </div>
-          <div className="hero__visual" aria-label="솔로몬 실제 작업사례">
+          <div className="hero__visual" aria-label="솔로몬 작업사례 이미지 자리">
             <div className="visual-card visual-card--main">
-              <Image alt={featuredPost ? `${featuredPost.title} 작업사진` : "솔로몬 청소 작업사례"} fill priority sizes="(max-width: 900px) 100vw, 46vw" src={featuredPost?.imageUrl ?? "/og.png"} unoptimized={Boolean(featuredPost?.imageUrl)} />
-              <div className="visual-card__overlay">
-                <span>실제 작업 기록</span>
-                <strong>사진으로 확인하는<br />솔로몬의 현장</strong>
-                <Link href="/portfolio">작업사례 보기 →</Link>
-              </div>
+              <span>SOLOMON CLEAN</span>
+              <strong>현장에 맞춘<br />정확한 청소 계획</strong>
+              <small>블로그 실제 작업사진 연동 예정</small>
             </div>
             <div className="visual-stat">
               <strong>{services.length}개</strong>
