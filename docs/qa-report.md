@@ -12,4 +12,4 @@
 - Defect fixed: the local fallback URL previously sent the favicon request to an example domain; it now uses `http://localhost:3002`.
 - Defect fixed: the client-only estimate page lacked unique metadata; the form is now composed under a server page with dedicated title, description and canonical path.
 
-Production Core Web Vitals and real submission delivery remain part of deployment verification because they require the final domain and Cloudflare bindings.
+Production Core Web Vitals and real submission delivery remain part of deployment verification because they require the final domain and Vercel storage connections.

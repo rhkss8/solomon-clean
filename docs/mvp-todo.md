@@ -2,7 +2,7 @@
 
 ## Phase 0 — Foundation
 
-- [x] vinext/Next.js TypeScript 앱 초기화
+- [x] Vercel용 Next.js TypeScript 앱 초기화
 - [x] Node 버전과 환경변수 규칙
 - [x] TARS 문서와 재진입 도구 설치
 - [x] 중앙 브랜드·회사·서비스 도메인 모델

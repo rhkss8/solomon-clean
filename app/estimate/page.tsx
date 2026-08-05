@@ -1,5 +1,6 @@
 import { EstimateForm } from "@/src/components/EstimateForm";
 import { createPageMetadata } from "@/src/lib/metadata";
+import { Suspense } from "react";
 
 export const metadata = createPageMetadata({
   title: "청소·폐기물 무료견적 요청",
@@ -8,5 +9,5 @@ export const metadata = createPageMetadata({
 });
 
 export default function EstimatePage() {
-  return <EstimateForm />;
+  return <Suspense fallback={null}><EstimateForm /></Suspense>;
 }

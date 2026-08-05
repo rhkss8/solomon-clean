@@ -130,3 +130,10 @@
 - Node Fetch 헤더는 ASCII 전용 User-Agent를 사용해 한글 ByteString 오류를 방지한다.
 - 메인페이지는 대표 글 3개만 표시하고 후기·작업사례 페이지는 RSS가 제공하는 전체 항목을 표시한다.
 - RSS 장애 시 대표 글 fallback을 유지하되 실패 원인을 서버 로그에 남긴다.
+
+## 2026-08-05 — Vercel 표준 Next.js 전환
+
+- 초기 Sites/vinext 배포 결정을 폐기하고 공식 Next.js 빌드와 Vercel 배포 구조를 사용한다.
+- 견적 데이터는 Vercel Marketplace Postgres에 저장하고 현장 사진은 비공개 Vercel Blob에 저장한다.
+- 사진은 Vercel Function 요청 크기 제한을 피하기 위해 브라우저에서 Blob으로 직접 업로드한 뒤 검증된 비공개 경로만 견적 API에 전달한다.
+- 이 결정은 위의 Sites D1/R2 배포 패키지 결정을 대체한다.

@@ -11,7 +11,7 @@ export type BlogFeedResult = {
 };
 
 /**
- * Reads the Naver RSS feed on the server and lets Next/vinext revalidate the
+ * Reads the Naver RSS feed on the server and lets Next.js revalidate the
  * upstream response hourly. Known posts keep the site useful during an outage.
  */
 export async function getBlogPosts(limit?: number): Promise<BlogFeedResult> {
