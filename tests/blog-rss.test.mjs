@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { decodeXmlText, parseNaverBlogRss } from "../src/domain/blog.ts";
+import { decodeXmlText, normalizeNaverImageUrl, parseNaverBlogRss } from "../src/domain/blog.ts";
 
 const rssFixture = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"><channel><item>
@@ -9,6 +9,7 @@ const rssFixture = `<?xml version="1.0" encoding="UTF-8"?>
   <link><![CDATA[https://blog.naver.com/solomon_clean/223265815477?fromRss=true]]></link>
   <guid>https://blog.naver.com/solomon_clean/223265815477</guid>
   <pubDate>Wed, 15 Nov 2023 20:25:20 +0900</pubDate>
+  <description><![CDATA[작업 기록 <img src="http://blogthumb.pstatic.net/folder/cover.jpg?type=s3" />]]></description>
 </item></channel></rss>`;
 
 test("decodes CDATA and XML entities", () => {
@@ -22,7 +23,17 @@ test("parses the supported Naver RSS fields", () => {
     href: "https://blog.naver.com/solomon_clean/223265815477",
     publishedAt: "Wed, 15 Nov 2023 20:25:20 +0900",
     displayDate: "2023.11.15",
+    imageUrl: "https://blogthumb.pstatic.net/folder/cover.jpg",
   }]);
+});
+
+test("normalizes only approved Naver image hosts", () => {
+  assert.equal(
+    normalizeNaverImageUrl("http://blogthumb.pstatic.net/folder/cover.jpg?type=s3#image"),
+    "https://blogthumb.pstatic.net/folder/cover.jpg",
+  );
+  assert.equal(normalizeNaverImageUrl("https://example.com/cover.jpg"), null);
+  assert.equal(normalizeNaverImageUrl("javascript:alert(1)"), null);
 });
 
 test("rejects links outside the configured Naver blog", () => {

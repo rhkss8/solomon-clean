@@ -166,6 +166,7 @@ export const observedBlogPosts = [
     href: "https://blog.naver.com/solomon_clean/223546839503",
     publishedAt: "Tue, 13 Aug 2024 00:00:00 +0900",
     displayDate: "2024.08.13",
+    imageUrl: null,
   },
   {
     title: "인천 검단신도시 80평 병원 준공청소",
@@ -173,6 +174,7 @@ export const observedBlogPosts = [
     href: "https://blog.naver.com/solomon_clean/223545309323",
     publishedAt: "Mon, 12 Aug 2024 00:00:00 +0900",
     displayDate: "2024.08.12",
+    imageUrl: null,
   },
   {
     title: "송도 아파트 인테리어·입주청소",
@@ -180,5 +182,6 @@ export const observedBlogPosts = [
     href: "https://blog.naver.com/solomon_clean/223540828722",
     publishedAt: "Thu, 08 Aug 2024 00:00:00 +0900",
     displayDate: "2024.08.08",
+    imageUrl: null,
   },
 ] as const;

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BlogPostGrid } from "@/src/components/BlogPostGrid";
 import { createPageMetadata } from "@/src/lib/metadata";
 import { getBlogPosts } from "@/src/server/blog-feed";
 
@@ -21,14 +22,7 @@ export default async function PortfolioPage() {
         </div>
       </section>
       <section className="section">
-        <div className="container post-grid">
-          {posts.map((post) => (
-            <a className="post-card" href={post.href} key={post.href} rel="noreferrer" target="_blank">
-              <div className="before-after"><span>BEFORE</span><span>AFTER</span></div>
-              <div><small>{post.category} · {post.displayDate}</small><h2>{post.title}</h2><span className="text-link">작업 기록 보기 →</span></div>
-            </a>
-          ))}
-        </div>
+        <div className="container"><BlogPostGrid headingLevel={2} posts={posts} /></div>
         <div className="container centered-action"><Link className="button button--primary" href="/estimate">비슷한 현장 견적받기</Link></div>
       </section>
     </main>

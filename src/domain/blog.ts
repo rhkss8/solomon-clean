@@ -4,7 +4,13 @@ export type BlogPost = {
   href: string;
   publishedAt: string;
   displayDate: string;
+  imageUrl: string | null;
 };
+
+const NAVER_IMAGE_HOSTS = new Set([
+  "blogthumb.pstatic.net",
+  "blogpfthumb.phinf.naver.net",
+]);
 
 /** Decodes the XML entities used by Naver RSS text fields. */
 export function decodeXmlText(value: string): string {
@@ -38,6 +44,28 @@ function formatPublishedDate(value: string): string {
     .replace(/\.$/, "");
 }
 
+/** Allows only Naver-hosted blog images and resolves them to an HTTPS original URL. */
+export function normalizeNaverImageUrl(value: string): string | null {
+  try {
+    const url = new URL(decodeXmlText(value));
+    if (!NAVER_IMAGE_HOSTS.has(url.hostname)) return null;
+    if (url.protocol !== "http:" && url.protocol !== "https:") return null;
+
+    url.protocol = "https:";
+    url.port = "";
+    url.search = "";
+    url.hash = "";
+    return url.toString();
+  } catch {
+    return null;
+  }
+}
+
+function readRepresentativeImage(description: string): string | null {
+  const imageSource = description.match(/<img[^>]+src=["']([^"']+)["']/i)?.[1];
+  return imageSource ? normalizeNaverImageUrl(imageSource) : null;
+}
+
 /** Converts Naver's RSS 2.0 payload into the public blog card model. */
 export function parseNaverBlogRss(xml: string): BlogPost[] {
   const items = xml.match(/<item>[\s\S]*?<\/item>/gi) ?? [];
@@ -46,6 +74,7 @@ export function parseNaverBlogRss(xml: string): BlogPost[] {
     const title = readTag(item, "title");
     const href = readTag(item, "guid") || readTag(item, "link");
     const publishedAt = readTag(item, "pubDate");
+    const description = readTag(item, "description");
 
     if (!title || !href.startsWith("https://blog.naver.com/solomon_clean/")) {
       return [];
@@ -57,6 +86,7 @@ export function parseNaverBlogRss(xml: string): BlogPost[] {
       href,
       publishedAt,
       displayDate: formatPublishedDate(publishedAt),
+      imageUrl: readRepresentativeImage(description),
     }];
   });
 }
