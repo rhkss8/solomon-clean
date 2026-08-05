@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { BlogPostGrid } from "@/src/components/BlogPostGrid";
-import { ServiceGrid } from "@/src/components/ServiceGrid";
+import { ServiceQuickMenu } from "@/src/components/ServiceQuickMenu";
 import { ServiceStoryShowcase } from "@/src/components/ServiceStoryShowcase";
 import { StructuredData } from "@/src/components/StructuredData";
 import { services, siteConfig } from "@/src/domain/site";
@@ -71,7 +71,7 @@ export default async function HomePage() {
             </div>
             <Link className="text-link" href="/services">전체 서비스 보기 →</Link>
           </div>
-          <ServiceGrid />
+          <ServiceQuickMenu />
         </div>
       </section>
 
