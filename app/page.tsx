@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { BlogPostGrid } from "@/src/components/BlogPostGrid";
 import { ServiceGrid } from "@/src/components/ServiceGrid";
+import { ServiceStoryShowcase } from "@/src/components/ServiceStoryShowcase";
 import { StructuredData } from "@/src/components/StructuredData";
 import { services, siteConfig } from "@/src/domain/site";
 import { buildLocalBusinessSchema } from "@/src/domain/structured-data";
@@ -75,32 +75,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="section story-section">
-        <div className="container story-stack">
-          <article className="story-row">
-            <div className="story-row__copy">
-              <span className="eyebrow">ONE-STOP SERVICE</span>
-              <h2>청소부터 폐기와 정리까지<br />한 번에 상담하세요.</h2>
-              <p>여러 업체를 따로 알아보지 않아도 됩니다. 현장에 필요한 청소, 폐기물 처리와 정리 범위를 함께 확인해 작업 순서를 안내합니다.</p>
-              <Link className="text-link" href="/services">서비스 한눈에 보기 →</Link>
-            </div>
-            <div className="story-row__art">
-              <Image alt="청소, 폐기물 처리와 정리를 함께 진행하는 솔로몬 작업팀 일러스트" height={939} sizes="(max-width: 900px) 100vw, 56vw" src="/illustrations/one-stop-service.png" width={1678} />
-            </div>
-          </article>
-          <article className="story-row story-row--reverse">
-            <div className="story-row__copy">
-              <span className="eyebrow">PHOTO ESTIMATE</span>
-              <h2>사진으로 먼저 확인하고<br />필요한 범위를 정합니다.</h2>
-              <p>공간과 오염 상태, 폐기물량을 사진으로 보내주시면 상담에 필요한 조건을 먼저 정리합니다. 현장 상황에 맞는 작업만 차분하게 안내합니다.</p>
-              <Link className="button button--primary" href="/estimate">사진으로 무료견적 요청</Link>
-            </div>
-            <div className="story-row__art">
-              <Image alt="현장 사진을 보며 청소 범위를 상담하는 솔로몬 직원 일러스트" height={939} sizes="(max-width: 900px) 100vw, 56vw" src="/illustrations/photo-estimate.png" width={1678} />
-            </div>
-          </article>
-        </div>
-      </section>
+      <ServiceStoryShowcase />
 
       <section className="section section--dark">
         <div className="container">
