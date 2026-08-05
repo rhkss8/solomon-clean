@@ -77,6 +77,12 @@ h1, h2, h3, p { margin-top: 0; }
 .section-heading h2, .split-section h2 { margin: 9px 0 0; font-size: clamp(32px, 4vw, 48px); line-height: 1.18; letter-spacing: -.045em; }
 .section-heading--light p { color: #bfc4c8; }
 .service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.region-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.region-card { padding: 30px; border: 1px solid var(--border); background: white; }
+.region-card > span { color: var(--brand-primary); font-size: 13px; font-weight: 850; }
+.region-card h2 { margin: 30px 0 12px; font-size: 25px; }
+.region-card p { color: var(--text-secondary); line-height: 1.7; }
+.region-card strong { display: inline-block; margin-top: 18px; }
 .service-card { min-height: 225px; padding: 26px; display: flex; flex-direction: column; background: white; border: 1px solid var(--border); border-radius: 8px; transition: .2s ease; }
 .service-card:hover { transform: translateY(-4px); border-color: #c7a4a1; box-shadow: var(--shadow); }
 .service-card__number { color: var(--brand-primary); font-size: 12px; font-weight: 850; letter-spacing: .12em; }
@@ -174,7 +180,7 @@ h1, h2, h3, p { margin-top: 0; }
   .hero__grid, .split-section, .detail-columns, .price-calculator { grid-template-columns: 1fr; gap: 44px; }
   .hero__visual { min-height: 390px; }
   .visual-card--main { height: 360px; }
-  .service-grid { grid-template-columns: repeat(2, 1fr); }
+  .service-grid, .region-grid { grid-template-columns: repeat(2, 1fr); }
   .reason-grid { grid-template-columns: repeat(2, 1fr); }
   .post-grid { grid-template-columns: repeat(2, 1fr); }
   .price-list article { grid-template-columns: 1fr; }
@@ -191,7 +197,7 @@ h1, h2, h3, p { margin-top: 0; }
   .hero__content > p, .page-hero p { font-size: 16px; }
   .section { padding: 72px 0; }
   .section-heading { align-items: start; flex-direction: column; }
-  .service-grid, .reason-grid, .post-grid, .process-grid, .form-grid, .footer-grid { grid-template-columns: 1fr; }
+  .service-grid, .region-grid, .reason-grid, .post-grid, .process-grid, .form-grid, .footer-grid { grid-template-columns: 1fr; }
   .reason-card { min-height: 190px; border-right: 0; border-bottom: 1px solid #42474d; padding: 26px 0; }
   .reason-card + .reason-card { padding-left: 0; }
   .reason-card h3 { margin-top: 36px; }
