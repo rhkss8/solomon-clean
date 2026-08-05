@@ -90,6 +90,16 @@ h1, h2, h3, p { margin-top: 0; }
 .service-card__visual small { color: var(--brand-primary); font-size: 12px; font-weight: 850; letter-spacing: .12em; }
 .service-card h3 { margin: 0 0 8px; font-size: 22px; letter-spacing: -.035em; }
 .service-card p { min-height: 50px; margin-bottom: 20px; color: var(--text-secondary); font-size: 14px; }
+.story-section { overflow: hidden; background: #f1f3f6; }
+.story-stack { display: grid; gap: 110px; }
+.story-row { display: grid; grid-template-columns: .78fr 1.22fr; align-items: center; gap: 72px; }
+.story-row--reverse { grid-template-columns: 1.22fr .78fr; }
+.story-row--reverse .story-row__copy { order: 2; }
+.story-row--reverse .story-row__art { order: 1; }
+.story-row__copy h2 { margin: 10px 0 22px; font-size: clamp(34px, 4vw, 50px); line-height: 1.18; letter-spacing: -.045em; }
+.story-row__copy p { margin-bottom: 28px; color: var(--text-secondary); font-size: 17px; line-height: 1.8; }
+.story-row__art { overflow: hidden; border-radius: 18px; background: #f8f5ef; box-shadow: 0 20px 55px rgba(23,25,28,.07); }
+.story-row__art img { width: 100%; height: auto; display: block; }
 .reason-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid #42474d; }
 .reason-card { padding: 34px 26px 10px 0; border-right: 1px solid #42474d; }
 .reason-card + .reason-card { padding-left: 26px; }
@@ -199,7 +209,9 @@ h1, h2, h3, p { margin-top: 0; }
   .desktop-nav, .header-cta { display: none; }
   .mobile-menu { display: block; }
   .hero { padding-top: 58px; }
-  .hero__grid, .split-section, .detail-columns, .price-calculator, .evidence-panel { grid-template-columns: 1fr; gap: 44px; }
+  .hero__grid, .split-section, .detail-columns, .price-calculator, .evidence-panel, .story-row, .story-row--reverse { grid-template-columns: 1fr; gap: 44px; }
+  .story-stack { gap: 78px; }
+  .story-row--reverse .story-row__copy, .story-row--reverse .story-row__art { order: initial; }
   .hero__visual { min-height: 390px; }
   .visual-card--main { height: 360px; }
   .service-grid, .region-grid { grid-template-columns: repeat(2, 1fr); }
