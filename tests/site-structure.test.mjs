@@ -41,13 +41,13 @@ test("includes responsive navigation and estimate routes", async () => {
   assert.match(header, /navigation/);
 });
 
-test("loads Naver reviews through a cached server boundary", async () => {
-  const [feed, reviewsPage] = await Promise.all([
+test("loads Naver work stories through a cached server boundary", async () => {
+  const [feed, portfolioPage] = await Promise.all([
     readFile(projectFile("src/server/blog-feed.ts"), "utf8"),
-    readFile(projectFile("app/reviews/page.tsx"), "utf8"),
+    readFile(projectFile("app/portfolio/page.tsx"), "utf8"),
   ]);
 
   assert.match(feed, /next:\s*\{\s*revalidate:/);
   assert.match(feed, /source:\s*"fallback"/);
-  assert.match(reviewsPage, /getBlogPosts/);
+  assert.match(portfolioPage, /getBlogPosts/);
 });

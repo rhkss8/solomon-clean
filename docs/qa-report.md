@@ -4,7 +4,7 @@
 
 - Runtime: Node 22.18.0, pnpm 10.15.1, Chromium via Playwright CLI, local port 3002.
 - Viewports: desktop 1440×1000, mobile 390×844.
-- Mobile routes checked: homepage, service hub/detail, prices, portfolio, reviews, region hub/detail, company, estimate, three policy pages, robots and sitemap.
+- Mobile routes checked: homepage, service hub/detail, prices, portfolio, region hub/detail, company, estimate, three policy pages, robots and sitemap.
 - Desktop templates checked: homepage, service detail, prices, company, estimate and privacy.
 - Result: all HTML routes returned 200, had one H1, unique titles, and no horizontal overflow.
 - Estimate form: empty submission returned the expected 422 and displayed field-level errors plus a summary message.
