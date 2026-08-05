@@ -1,24 +1,15 @@
 "use client";
-
 import { useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
+import type { EstimateField, EstimateValidationResult } from "@/src/domain/estimate";
 import { services } from "@/src/domain/site";
 
-type SubmissionState = "idle" | "success";
-
-/** Client estimate draft; real delivery is attached through a server adapter later. */
+type SubmissionState = "idle" | "submitting" | "success" | "error";
+/** Collects an estimate draft and delegates all trust decisions to the server validator. */
 export default function EstimatePage() {
-  const searchParams = useSearchParams();
-  const [submissionState, setSubmissionState] = useState<SubmissionState>("idle");
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setSubmissionState("success");
-  }
-
-  if (submissionState === "success") {
-    return <main><section className="page-hero"><div className="container narrow success-panel"><span className="success-mark">✓</span><h1>견적 요청이 준비됐습니다.</h1><p>현재는 개발 단계라 실제 전송되지 않았습니다. 담당 이메일과 저장 방식을 연결하면 접수번호와 알림이 발송됩니다.</p><button className="button button--secondary" onClick={()=>setSubmissionState("idle")} type="button">다시 작성</button></div></section></main>;
-  }
-
-  return <main><section className="page-hero"><div className="container narrow"><span className="eyebrow">FREE ESTIMATE</span><h1>현장 정보를 알려주세요.</h1><p>필수 정보만 먼저 받고, 세부 내용은 상담 과정에서 확인합니다.</p></div></section><section className="section"><div className="container narrow"><form className="estimate-form" onSubmit={handleSubmit}><label>필요한 서비스<select defaultValue={searchParams.get("service") ?? ""} name="service" required><option disabled value="">서비스 선택</option>{services.map(service=><option key={service.slug} value={service.slug}>{service.name}</option>)}</select></label><div className="form-grid"><label>성함<input name="name" placeholder="성함" required /></label><label>연락처<input inputMode="tel" name="phone" placeholder="010-0000-0000" required /></label></div><label>서비스 지역<input name="area" placeholder="예: 서울 마포구" required /></label><label>현장 설명<textarea name="description" placeholder="공간, 평수, 오염 상태, 폐기물량 등 알고 있는 내용을 적어주세요." rows={6} required /></label><label>희망일<input name="preferredDate" type="date" /></label><label className="file-field">현장 사진<input accept="image/jpeg,image/png,image/webp" multiple name="photos" type="file" /><small>JPG, PNG, WebP · 실제 저장소 연결 전에는 전송되지 않습니다.</small></label><label className="check-field"><input name="privacy" required type="checkbox" /> 개인정보 수집 및 상담 연락에 동의합니다.</label><button className="button button--primary button--large" type="submit">견적 요청 확인</button></form></div></section></main>;
+  const searchParams = useSearchParams(); const [submissionState, setSubmissionState] = useState<SubmissionState>("idle"); const [fieldErrors, setFieldErrors] = useState<Partial<Record<EstimateField, string>>>({});
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) { event.preventDefault(); setSubmissionState("submitting"); setFieldErrors({}); const formData = new FormData(event.currentTarget); const payload = { service: formData.get("service"), name: formData.get("name"), phone: formData.get("phone"), area: formData.get("area"), description: formData.get("description"), preferredDate: formData.get("preferredDate"), privacy: formData.get("privacy") === "on" }; try { const response = await fetch("/api/estimates/validate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); const result = await response.json() as EstimateValidationResult; if (!response.ok || !result.success) { if ("fieldErrors" in result) setFieldErrors(result.fieldErrors); setSubmissionState("error"); return; } setSubmissionState("success"); } catch { setSubmissionState("error"); } }
+  if (submissionState === "success") return <main><section className="page-hero"><div className="container narrow success-panel"><span className="success-mark">✓</span><h1>입력 확인이 완료됐습니다.</h1><p>서버 검증을 통과했습니다. 다음 단계에서 사진과 견적 저장소를 연결하면 실제 접수로 전환됩니다.</p><button className="button button--secondary" onClick={() => setSubmissionState("idle")} type="button">다시 작성</button></div></section></main>;
+  const error = (field: EstimateField) => fieldErrors[field] && <small className="field-error">{fieldErrors[field]}</small>;
+  return <main><section className="page-hero"><div className="container narrow"><span className="eyebrow">FREE ESTIMATE</span><h1>현장 정보를 알려주세요.</h1><p>필수 정보만 먼저 받고, 세부 내용은 상담 과정에서 확인합니다.</p></div></section><section className="section"><div className="container narrow"><form className="estimate-form" onSubmit={handleSubmit} noValidate><label>필요한 서비스<select defaultValue={searchParams.get("service") ?? ""} name="service"><option disabled value="">서비스 선택</option>{services.map((service) => <option key={service.slug} value={service.slug}>{service.name}</option>)}</select>{error("service")}</label><div className="form-grid"><label>성함<input name="name" placeholder="성함" />{error("name")}</label><label>연락처<input inputMode="tel" name="phone" placeholder="010-0000-0000" />{error("phone")}</label></div><label>서비스 지역<input name="area" placeholder="예: 서울 마포구" />{error("area")}</label><label>현장 설명<textarea name="description" placeholder="공간, 평수, 오염 상태, 폐기물량 등 알고 있는 내용을 적어주세요." rows={6} />{error("description")}</label><label>희망일<input name="preferredDate" type="date" />{error("preferredDate")}</label><label className="file-field">현장 사진<input accept="image/jpeg,image/png,image/webp" multiple name="photos" type="file" /><small>사진 저장소 연결 전에는 전송되지 않습니다.</small></label><label className="check-field"><input name="privacy" type="checkbox" /> 개인정보 수집 및 상담 연락에 동의합니다.</label>{error("privacy")}<div aria-live="polite">{submissionState === "error" && Object.keys(fieldErrors).length === 0 && <p className="form-error">서버와 통신하지 못했습니다. 잠시 후 다시 시도해주세요.</p>}</div><button className="button button--primary button--large" disabled={submissionState === "submitting"} type="submit">{submissionState === "submitting" ? "확인 중…" : "견적 요청 확인"}</button></form></div></section></main>;
 }

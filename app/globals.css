@@ -163,6 +163,9 @@ h1, h2, h3, p { margin-top: 0; }
 .check-field input { width: 18px; height: 18px; }
 .success-panel { text-align: center; }
 .success-mark { width: 58px; height: 58px; margin: 0 auto 20px; display: grid; place-items: center; background: #167a5b; color: white; border-radius: 50%; font-size: 28px; }
+.field-error, .form-error { color: var(--brand-primary); font-weight: 700; }
+.form-error { margin: 0; }
+.estimate-form button:disabled { cursor: wait; opacity: .65; }
 
 .site-footer { padding: 70px 0 24px; background: #111315; color: #b8bec4; }
 .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 70px; }
