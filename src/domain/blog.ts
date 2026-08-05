@@ -53,12 +53,22 @@ export function normalizeNaverImageUrl(value: string): string | null {
 
     url.protocol = "https:";
     url.port = "";
+    const thumbnailType = url.searchParams.get("type");
     url.search = "";
+    if (url.hostname === "blogthumb.pstatic.net") {
+      url.searchParams.set("type", thumbnailType?.match(/^s\d$/) ? thumbnailType : "s3");
+    }
     url.hash = "";
     return url.toString();
   } catch {
     return null;
   }
+}
+
+/** Converts an approved Naver image into a same-origin proxy path for browser safety. */
+export function createBlogImageProxyPath(value: string): string | null {
+  const normalizedUrl = normalizeNaverImageUrl(value);
+  return normalizedUrl ? `/api/blog-image?url=${encodeURIComponent(normalizedUrl)}` : null;
 }
 
 function readRepresentativeImage(description: string): string | null {

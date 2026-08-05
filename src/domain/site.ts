@@ -169,30 +169,3 @@ export const navigation = [
   { href: "/regions", label: "서비스 지역" },
   { href: "/company", label: "회사소개" },
 ] as const;
-
-export const observedBlogPosts = [
-  {
-    title: "안산공장 사무실 인테리어청소",
-    category: "상가·사무실",
-    href: "https://blog.naver.com/solomon_clean/223546839503",
-    publishedAt: "Tue, 13 Aug 2024 00:00:00 +0900",
-    displayDate: "2024.08.13",
-    imageUrl: null,
-  },
-  {
-    title: "인천 검단신도시 80평 병원 준공청소",
-    category: "준공청소",
-    href: "https://blog.naver.com/solomon_clean/223545309323",
-    publishedAt: "Mon, 12 Aug 2024 00:00:00 +0900",
-    displayDate: "2024.08.12",
-    imageUrl: null,
-  },
-  {
-    title: "송도 아파트 인테리어·입주청소",
-    category: "입주청소",
-    href: "https://blog.naver.com/solomon_clean/223540828722",
-    publishedAt: "Thu, 08 Aug 2024 00:00:00 +0900",
-    displayDate: "2024.08.08",
-    imageUrl: null,
-  },
-] as const;

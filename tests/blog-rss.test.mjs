@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { decodeXmlText, normalizeNaverImageUrl, parseNaverBlogRss } from "../src/domain/blog.ts";
+import { createBlogImageProxyPath, decodeXmlText, normalizeNaverImageUrl, parseNaverBlogRss } from "../src/domain/blog.ts";
 
 const rssFixture = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"><channel><item>
@@ -23,17 +23,22 @@ test("parses the supported Naver RSS fields", () => {
     href: "https://blog.naver.com/solomon_clean/223265815477",
     publishedAt: "Wed, 15 Nov 2023 20:25:20 +0900",
     displayDate: "2023.11.15",
-    imageUrl: "https://blogthumb.pstatic.net/folder/cover.jpg",
+    imageUrl: "https://blogthumb.pstatic.net/folder/cover.jpg?type=s3",
   }]);
 });
 
 test("normalizes only approved Naver image hosts", () => {
   assert.equal(
     normalizeNaverImageUrl("http://blogthumb.pstatic.net/folder/cover.jpg?type=s3#image"),
-    "https://blogthumb.pstatic.net/folder/cover.jpg",
+    "https://blogthumb.pstatic.net/folder/cover.jpg?type=s3",
   );
   assert.equal(normalizeNaverImageUrl("https://example.com/cover.jpg"), null);
   assert.equal(normalizeNaverImageUrl("javascript:alert(1)"), null);
+});
+
+test("creates a same-origin proxy path only for an approved Naver image", () => {
+  assert.match(createBlogImageProxyPath("https://blogthumb.pstatic.net/folder/cover.jpg?type=s3"), /^\/api\/blog-image\?url=/);
+  assert.equal(createBlogImageProxyPath("https://example.com/cover.jpg"), null);
 });
 
 test("rejects links outside the configured Naver blog", () => {

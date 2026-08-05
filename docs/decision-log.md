@@ -124,3 +124,9 @@
 - 카카오톡 상담방은 `https://open.kakao.com/o/gRiUs6Lf`로 연결한다.
 - 변경 가능성이 큰 연락처, 가격·VAT, 사업 증빙, 개인정보·예약 정책은 `src/config/operations/`에서 각각 분리 관리한다.
 - 미확정 값은 빈 문자열, `null`, 빈 배열과 `pending` 상태로 명시해 실제 정보처럼 노출되지 않게 한다.
+
+## 2026-08-05 — 블로그 RSS 전체 표시
+
+- Node Fetch 헤더는 ASCII 전용 User-Agent를 사용해 한글 ByteString 오류를 방지한다.
+- 메인페이지는 대표 글 3개만 표시하고 후기·작업사례 페이지는 RSS가 제공하는 전체 항목을 표시한다.
+- RSS 장애 시 대표 글 fallback을 유지하되 실패 원인을 서버 로그에 남긴다.
