@@ -3,7 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { StructuredData } from "@/src/components/StructuredData";
 import { getServiceDetail } from "@/src/domain/service-details";
-import { getServiceBySlug, services, siteConfig } from "@/src/domain/site";
+import { getServiceBySlug, services } from "@/src/domain/site";
+import { buildFaqSchema, buildServiceSchema } from "@/src/domain/structured-data";
 import { createPageMetadata } from "@/src/lib/metadata";
 
 export function generateStaticParams() { return services.map((service) => ({ slug: service.slug })); }
@@ -18,8 +19,8 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   const detail = getServiceDetail(service.slug);
   if (!detail) notFound();
   return <main>
-    <StructuredData data={{ "@context": "https://schema.org", "@type": "Service", name: service.name, description: service.description, areaServed: "대한민국", provider: { "@type": "Organization", name: siteConfig.name } }} />
-    <StructuredData data={{ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: detail.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) }} />
+    <StructuredData data={buildServiceSchema(service)} />
+    <StructuredData data={buildFaqSchema(detail.faqs)} />
     <section className="page-hero"><div className="container narrow"><span className="eyebrow">SERVICE {service.symbol}</span><h1>{service.name}</h1><p>{service.description}</p><div className="button-row"><Link className="button button--primary" href={`/estimate?service=${service.slug}`}>무료견적 요청</Link><Link className="button button--secondary" href="/prices">비용 기준 보기</Link></div></div></section>
     <section className="section"><div className="container detail-columns"><div><span className="eyebrow">WORK SCOPE</span><h2>기본 작업 범위</h2><ul className="check-list">{detail.workScopes.map((item) => <li key={item}>{item}</li>)}</ul></div><div><span className="eyebrow">SITE CHECK</span><h2>견적 전 확인사항</h2><ul className="check-list">{detail.siteChecks.map((item) => <li key={item}>{item}</li>)}</ul></div></div></section>
     <section className="section section--subtle"><div className="container"><div className="section-heading"><div><span className="eyebrow">PROCESS</span><h2>상담부터 완료까지</h2></div></div><div className="process-grid">{detail.process.map((step, index) => <article key={step}><span>0{index + 1}</span><h3>{step}</h3></article>)}</div></div></section>

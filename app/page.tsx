@@ -3,6 +3,7 @@ import { BlogPostGrid } from "@/src/components/BlogPostGrid";
 import { ServiceGrid } from "@/src/components/ServiceGrid";
 import { StructuredData } from "@/src/components/StructuredData";
 import { services, siteConfig } from "@/src/domain/site";
+import { buildLocalBusinessSchema } from "@/src/domain/structured-data";
 import { createPageMetadata } from "@/src/lib/metadata";
 import { getBlogPosts } from "@/src/server/blog-feed";
 
@@ -17,17 +18,7 @@ export default async function HomePage() {
   return (
     <main>
       <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          "@type": "LocalBusiness",
-          name: siteConfig.name,
-          url: siteConfig.url,
-          telephone: siteConfig.phone,
-          email: siteConfig.email,
-          areaServed: { "@type": "Country", name: "대한민국" },
-          description: siteConfig.description,
-          sameAs: [siteConfig.blogUrl],
-        }}
+        data={buildLocalBusinessSchema()}
       />
       <section className="hero">
         <div className="container hero__grid">
