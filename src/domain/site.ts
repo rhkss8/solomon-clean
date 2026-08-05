@@ -9,7 +9,7 @@ export const siteConfig = {
   shortName: "솔로몬",
   description:
     "입주·이사·상업공간·특수청소와 폐기물 처리까지 전국에서 상담할 수 있는 종합청소 서비스입니다.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://solomon-clean.example.com",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3002",
   phone: process.env.NEXT_PUBLIC_PHONE ?? "01052071642",
   kakaoUrl: process.env.NEXT_PUBLIC_KAKAO_URL ?? "",
   kakaoId: process.env.NEXT_PUBLIC_KAKAO_ID ?? "schoo88",
