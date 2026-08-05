@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { businessProfile, getVerifiedBusinessEvidence } from "../src/domain/business-profile.ts";
+import { businessProfile, getVerifiedBusinessEvidence } from "../src/config/operations/business.ts";
 
 test("does not publish pending business evidence as a verified claim", () => {
   assert.deepEqual(getVerifiedBusinessEvidence(businessProfile.evidence), []);

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { businessProfile, getVerifiedBusinessEvidence } from "@/src/domain/business-profile";
+import { businessProfile, getVerifiedBusinessEvidence } from "@/src/config/operations/business";
 import { siteConfig } from "@/src/domain/site";
 
 /** Separates verified company facts from evidence awaiting representative review. */

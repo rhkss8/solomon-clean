@@ -1,4 +1,4 @@
-import { getVatPolicyLabel, pricePolicy } from "@/src/domain/price-policy";
+import { getVatPolicyLabel, pricePolicy } from "@/src/config/operations/pricing";
 
 /** Presents the current public price and VAT contract without inventing rates. */
 export function PricePolicyNotice() {

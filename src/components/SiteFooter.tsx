@@ -13,7 +13,7 @@ export function SiteFooter() {
           <p className="footer-note">전국 상담</p>
           <a href={`tel:${siteConfig.phone}`}>전화 {formatPhoneNumber(siteConfig.phone)}</a>
           <a href={`mailto:${siteConfig.email}`}>이메일 {siteConfig.email}</a>
-          <span>카카오톡 ID {siteConfig.kakaoId}</span>
+          <a href={siteConfig.kakaoUrl} rel="noreferrer" target="_blank">카카오톡 상담 · ID {siteConfig.kakaoId}</a>
         </div>
         <div>
           <strong>바로가기</strong>

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getVatPolicyLabel, pricePolicy } from "../src/domain/price-policy.ts";
+import { getVatPolicyLabel, pricePolicy } from "../src/config/operations/pricing.ts";
 
 test("keeps unconfirmed operating rates out of the public pricing contract", () => {
   assert.equal(pricePolicy.publicationStatus, "consultation-only");

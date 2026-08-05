@@ -1,4 +1,4 @@
-import type { PolicyDocument } from "@/src/domain/legal";
+import type { PolicyDocument } from "@/src/config/operations/policies";
 
 /** Renders a versioned policy and makes an unapproved draft impossible to mistake for final copy. */
 export function PolicyDocumentView({ document }: { document: PolicyDocument }) {
