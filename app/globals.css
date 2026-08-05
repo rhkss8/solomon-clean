@@ -139,6 +139,11 @@ h1, h2, h3, p { margin-top: 0; }
 .evidence-panel h2 { margin: 10px 0; font-size: clamp(28px, 4vw, 40px); }
 .evidence-panel p { color: var(--text-secondary); line-height: 1.75; }
 .evidence-pending { padding: 20px; border-left: 4px solid var(--brand-primary); background: var(--surface-subtle); }
+.policy-document { display: grid; gap: 36px; }
+.policy-document section { padding-bottom: 30px; border-bottom: 1px solid var(--border); }
+.policy-document h2 { margin: 0 0 14px; font-size: 24px; }
+.policy-document p { color: var(--text-secondary); line-height: 1.8; }
+.policy-draft { margin: 0; padding: 20px; border-left: 4px solid var(--brand-primary); background: var(--brand-soft); color: var(--ink) !important; font-weight: 700; }
 .price-calculator__form label { display: grid; gap: 8px; font-weight: 700; }
 .price-calculator__form select { min-height: 48px; padding: 0 12px; border: 1px solid var(--border); background: white; color: var(--ink); font: inherit; }
 .price-calculator__result { border-top: 4px solid var(--brand-primary); }
