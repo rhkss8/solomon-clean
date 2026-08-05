@@ -119,6 +119,16 @@ h1, h2, h3, p { margin-top: 0; }
 .price-list h2, .price-list p { margin: 0; }
 .price-list p { color: var(--text-secondary); }
 .price-list article > div:last-child { display: flex; align-items: center; gap: 18px; }
+.price-calculator { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.price-calculator__form, .price-calculator__result { padding: 30px; border: 1px solid var(--border); background: white; }
+.price-calculator__form { display: grid; gap: 18px; }
+.price-calculator__form label { display: grid; gap: 8px; font-weight: 700; }
+.price-calculator__form select { min-height: 48px; padding: 0 12px; border: 1px solid var(--border); background: white; color: var(--ink); font: inherit; }
+.price-calculator__result { border-top: 4px solid var(--brand-primary); }
+.price-calculator__result h2 { margin: 12px 0; font-size: 30px; }
+.price-calculator__result p { color: var(--text-secondary); line-height: 1.7; }
+.price-calculator__result ul { margin: 24px 0; padding-left: 20px; color: var(--text-secondary); }
+.price-calculator__result li + li { margin-top: 9px; }
 .process-grid { margin-top: 40px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 .process-grid article { min-height: 160px; padding: 22px; background: white; border: 1px solid var(--border); }
 .process-grid span { color: var(--brand-primary); font-size: 12px; font-weight: 850; }
@@ -161,7 +171,7 @@ h1, h2, h3, p { margin-top: 0; }
   .desktop-nav, .header-cta { display: none; }
   .mobile-menu { display: block; }
   .hero { padding-top: 58px; }
-  .hero__grid, .split-section, .detail-columns { grid-template-columns: 1fr; gap: 44px; }
+  .hero__grid, .split-section, .detail-columns, .price-calculator { grid-template-columns: 1fr; gap: 44px; }
   .hero__visual { min-height: 390px; }
   .visual-card--main { height: 360px; }
   .service-grid { grid-template-columns: repeat(2, 1fr); }
