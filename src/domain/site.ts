@@ -6,12 +6,14 @@ import { contactConfig } from "../config/operations/contact.ts";
  * Public pages, metadata, structured data, and contact actions consume this
  * object so a future logo or contact change has one predictable edit point.
  */
+const deployedSiteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : undefined;
+
 export const siteConfig = {
   name: "솔로몬 종합청소업체",
   shortName: "솔로몬",
   description:
     "입주·이사·상업공간·특수청소와 폐기물 처리까지 전국에서 상담할 수 있는 종합청소 서비스입니다.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3002",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? deployedSiteUrl ?? "http://localhost:3002",
   phone: process.env.NEXT_PUBLIC_PHONE ?? contactConfig.phone,
   kakaoUrl: process.env.NEXT_PUBLIC_KAKAO_URL ?? contactConfig.kakaoConsultationUrl,
   kakaoId: process.env.NEXT_PUBLIC_KAKAO_ID ?? contactConfig.kakaoId,
