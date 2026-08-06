@@ -6,7 +6,7 @@ import { getBlogPosts } from "@/src/server/blog-feed";
 
 export const metadata = createPageMetadata({
   title: "청소 작업사례",
-  description: "솔로몬의 입주·상업공간·폐기물 작업 기록을 확인하세요.",
+  description: "청소하는사람들의 입주·상업공간·폐기물 작업 기록을 확인하세요.",
   path: "/portfolio",
 });
 
@@ -19,7 +19,7 @@ export default async function PortfolioPage() {
         <div className="container">
           <span className="eyebrow">PORTFOLIO</span>
           <h1>현장의 변화는<br />사진으로 증명합니다.</h1>
-          <p>솔로몬 블로그에 기록된 실제 작업 현장입니다.</p>
+          <p>청소하는사람들 블로그에 기록된 실제 작업 현장입니다.</p>
           {source === "fallback" && <p className="feed-notice">현재 최신 글을 불러오지 못해 확인된 대표 작업을 표시합니다.</p>}
         </div>
       </section>

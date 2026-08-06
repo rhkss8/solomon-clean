@@ -3,7 +3,7 @@ import { createPageMetadata } from "@/src/lib/metadata";
 
 export const metadata = createPageMetadata({
   title: "청소 서비스 전체보기",
-  description: "솔로몬 종합청소업체의 입주·이사·상업·특수청소 및 폐기물 서비스를 확인하세요.",
+  description: "청소하는사람들의 입주·이사·상업·특수청소 및 폐기물 서비스를 확인하세요.",
   path: "/services",
 });
 

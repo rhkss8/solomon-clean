@@ -9,8 +9,8 @@ import { contactConfig } from "../config/operations/contact.ts";
 const deployedSiteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : undefined;
 
 export const siteConfig = {
-  name: "솔로몬 종합청소업체",
-  shortName: "솔로몬",
+  name: "청소하는사람들",
+  shortName: "청소하는사람들",
   description:
     "입주·이사·상업공간·특수청소와 폐기물 처리까지 전국에서 상담할 수 있는 종합청소 서비스입니다.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? deployedSiteUrl ?? "http://localhost:3002",

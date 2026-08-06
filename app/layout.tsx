@@ -30,15 +30,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         {children}
         <SiteFooter />
         <div className="mobile-contact-bar" aria-label="빠른 상담">
-          <a href={`tel:${siteConfig.phone}`}>전화상담</a>
+          <Link href="/">홈으로</Link>
+          <Link href="/estimate">무료견적 신청</Link>
           {siteConfig.kakaoUrl ? (
-            <a href={siteConfig.kakaoUrl} rel="noreferrer" target="_blank">
-              카카오 상담
-            </a>
+            <a href={siteConfig.kakaoUrl} rel="noreferrer" target="_blank">24시 카톡상담</a>
           ) : (
             <a href={`mailto:${siteConfig.email}`}>이메일 상담</a>
           )}
-          <Link href="/estimate">무료견적</Link>
+          <Link href="/portfolio">작업사례</Link>
         </div>
       </body>
     </html>

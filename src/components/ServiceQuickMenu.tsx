@@ -1,24 +1,36 @@
+import Image from "next/image";
 import Link from "next/link";
-import { services, siteConfig } from "@/src/domain/site";
+import { siteConfig } from "@/src/domain/site";
+
+const quickServices = [
+  { href: "/services/waste-disposal", label: "폐기물처리", image: "/services/quick-menu-v3/waste-disposal.png" },
+  { href: "/services/hoarding-cleanup", label: "쓰레기집청소", image: "/services/quick-menu-v3/hoarding-cleanup.png" },
+  { href: "/services/deep-cleaning", label: "특수청소", image: "/services/quick-menu-v3/deep-cleaning.png" },
+  { href: "/services/estate-clearing", label: "유품정리", image: "/services/quick-menu-v3/estate-clearing.png" },
+  { href: "/services/waste-disposal", label: "분리수거", image: "/services/quick-menu-v3/recycling.png" },
+  { href: "/services/home-organizing", label: "정리수납", image: "/services/quick-menu-v3/home-organizing.png" },
+] as const;
 
 /** Image-led quick navigation for the homepage. The full service grid remains separate. */
 export function ServiceQuickMenu() {
   return (
     <nav className="service-quick" aria-label="서비스와 빠른 상담">
       <div className="service-quick__track">
-        {services.map((service, index) => (
-          <Link className="service-quick__item" href={`/services/${service.slug}`} key={service.slug}>
-            <span className={`service-quick__art service-quick__art--${index + 1}`} aria-hidden="true" />
-            <strong>{service.name}</strong>
+        {quickServices.map((service) => (
+          <Link className="service-quick__item" href={service.href} key={service.label}>
+            <span className="service-quick__art">
+              <Image alt="" fill priority sizes="(max-width: 600px) 22vw, 150px" src={service.image} unoptimized />
+            </span>
+            <strong>{service.label}</strong>
           </Link>
         ))}
         <a className="service-quick__item service-quick__item--action" href={siteConfig.kakaoUrl} rel="noreferrer" target="_blank">
-          <span className="service-quick__action service-quick__action--kakao" aria-hidden="true"><b>TALK</b><i>•••</i></span>
+          <span className="service-quick__art"><Image alt="" fill priority sizes="(max-width: 600px) 22vw, 150px" src="/services/quick-menu-v3/kakao-talk.png" unoptimized /></span>
           <strong>카카오 상담</strong>
         </a>
         <Link className="service-quick__item service-quick__item--action" href="/estimate">
-          <span className="service-quick__action service-quick__action--estimate" aria-hidden="true"><b>₩</b><i>견적</i></span>
-          <strong>빠른 견적</strong>
+          <span className="service-quick__art"><Image alt="" fill priority sizes="(max-width: 600px) 22vw, 150px" unoptimized src="/services/quick-menu-v3/quick-estimate.gif" /></span>
+          <strong>얼마예요?</strong>
         </Link>
       </div>
     </nav>
