@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { formatPhoneNumber, navigation, siteConfig } from "@/src/domain/site";
 import { BrandLogo } from "./BrandLogo";
+import { MobileMenuDrawer } from "./MobileMenuDrawer";
 
 function PhoneIcon() {
   return (
@@ -30,13 +31,7 @@ export function SiteHeader() {
           <a className="mobile-phone-action" aria-label="전화 상담" href={`tel:${siteConfig.phone}`}><PhoneIcon /></a>
           <a className="mobile-kakao-action" aria-label="카카오 상담" href={siteConfig.kakaoUrl} rel="noreferrer" target="_blank"><KakaoSymbol /></a>
         </div>
-        <details className="mobile-menu">
-          <summary aria-label="메뉴 열기"><span /><span /><span /></summary>
-          <nav aria-label="모바일 메뉴">
-            {navigation.map((item) => <Link href={item.href} key={item.href}>{item.label}</Link>)}
-            <Link href="/estimate">무료견적</Link>
-          </nav>
-        </details>
+        <MobileMenuDrawer />
       </div>
       <div className="site-header__nav-row">
         <nav aria-label="주요 메뉴" className="container desktop-nav">

@@ -13,6 +13,10 @@ export const siteConfig = {
   shortName: "청소하는사람들",
   description:
     "입주·이사·상업공간·특수청소와 폐기물 처리까지 전국에서 상담할 수 있는 종합청소 서비스입니다.",
+  shareTitle: "청소하는사람들 | 청소부터 폐기물 처리까지, 한 번에",
+  shareDescription:
+    "입주·이사청소부터 상가·특수청소, 폐기물 처리까지 사진으로 빠르게 무료견적을 받아보세요.",
+  shareImage: "/og.png",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? deployedSiteUrl ?? "http://localhost:3002",
   phone: process.env.NEXT_PUBLIC_PHONE ?? contactConfig.phone,
   kakaoUrl: process.env.NEXT_PUBLIC_KAKAO_URL ?? contactConfig.kakaoConsultationUrl,

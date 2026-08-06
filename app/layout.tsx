@@ -11,15 +11,29 @@ export const metadata: Metadata = {
     default: `${siteConfig.name} | 전국 청소·폐기물 무료견적`,
     template: `%s | ${siteConfig.shortName}`,
   },
-  description: siteConfig.description,
+  description: siteConfig.shareDescription,
+  applicationName: siteConfig.name,
+  authors: [{ name: siteConfig.name, url: siteConfig.url }],
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
+  category: "청소 서비스",
+  keywords: ["입주청소", "이사청소", "상가청소", "특수청소", "폐기물처리", "청소견적", "청소하는사람들"],
   icons: { icon: "/favicon.svg" },
   openGraph: {
     type: "website",
     locale: "ko_KR",
     siteName: siteConfig.name,
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: siteConfig.name }],
+    title: siteConfig.shareTitle,
+    description: siteConfig.shareDescription,
+    url: siteConfig.url,
+    images: [{ url: siteConfig.shareImage, width: 1200, height: 630, alt: `${siteConfig.name} 전문 청소팀` }],
   },
-  twitter: { card: "summary_large_image", images: ["/og.png"] },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.shareTitle,
+    description: siteConfig.shareDescription,
+    images: [siteConfig.shareImage],
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
