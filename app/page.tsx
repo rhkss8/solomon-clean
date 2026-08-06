@@ -54,8 +54,8 @@ export default async function HomePage() {
             <Link href="/prices">🤔 평균비용 확인하기</Link>
           </div>
           <div className="quick-hero__help">
-            <div><span><Image alt="비용을 확인하는 고객" fill sizes="64px" src="/home/avatars/cost-customer.jpg" /></span><p><strong>얼마인지 궁금하다면?</strong><Link href="/prices">예상 비용을 확인해보세요</Link></p></div>
-            <div><span><Image alt="전담 상담 매니저" fill sizes="64px" src="/home/avatars/support-manager.jpg" /></span><p><strong>상담 지원이 필요하다면?</strong><a href={siteConfig.kakaoUrl} rel="noreferrer" target="_blank">1:1 전담 매니저에게 문의하세요</a></p></div>
+            <div><span><Image alt="비용을 확인하는 고객" fill sizes="64px" src="/home/avatars/cost-customer-v2.jpg" /></span><p><strong>얼마인지 궁금하다면?</strong><Link href="/prices">예상 비용을 확인해보세요</Link></p></div>
+            <div><span><Image alt="전담 상담 매니저" fill sizes="64px" src="/home/avatars/support-manager-v2.jpg" /></span><p><strong>상담 지원이 필요하다면?</strong><a href={siteConfig.kakaoUrl} rel="noreferrer" target="_blank">1:1 전담 매니저에게 문의하세요</a></p></div>
           </div>
         </div>
       </section>

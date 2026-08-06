@@ -3,12 +3,12 @@ import Link from "next/link";
 import { siteConfig } from "@/src/domain/site";
 
 const quickServices = [
-  { href: "/services/waste-disposal", label: "폐기물처리", image: "/services/quick-menu-v3/waste-disposal.png" },
-  { href: "/services/hoarding-cleanup", label: "쓰레기집청소", image: "/services/quick-menu-v3/hoarding-cleanup.png" },
-  { href: "/services/deep-cleaning", label: "특수청소", image: "/services/quick-menu-v3/deep-cleaning.png" },
-  { href: "/services/estate-clearing", label: "유품정리", image: "/services/quick-menu-v3/estate-clearing.png" },
-  { href: "/services/waste-disposal", label: "분리수거", image: "/services/quick-menu-v3/recycling.png" },
-  { href: "/services/home-organizing", label: "정리수납", image: "/services/quick-menu-v3/home-organizing.png" },
+  { href: "/services/waste-disposal", label: "폐기물처리", image: "/services/quick-menu-v4/waste-disposal.jpg" },
+  { href: "/services/hoarding-cleanup", label: "쓰레기집청소", image: "/services/quick-menu-v4/hoarding-cleanup.jpg" },
+  { href: "/services/deep-cleaning", label: "특수청소", image: "/services/quick-menu-v4/deep-cleaning.jpg" },
+  { href: "/services/estate-clearing", label: "유품정리", image: "/services/quick-menu-v4/estate-clearing.jpg" },
+  { href: "/services/waste-disposal", label: "분리수거", image: "/services/quick-menu-v4/recycling.jpg" },
+  { href: "/services/home-organizing", label: "정리수납", image: "/services/quick-menu-v4/home-organizing.jpg" },
 ] as const;
 
 /** Image-led quick navigation for the homepage. The full service grid remains separate. */
@@ -25,11 +25,11 @@ export function ServiceQuickMenu() {
           </Link>
         ))}
         <a className="service-quick__item service-quick__item--action" href={siteConfig.kakaoUrl} rel="noreferrer" target="_blank">
-          <span className="service-quick__art"><Image alt="" fill priority sizes="(max-width: 600px) 22vw, 150px" src="/services/quick-menu-v3/kakao-talk.png" unoptimized /></span>
+          <span className="service-quick__art"><Image alt="" fill priority sizes="(max-width: 600px) 22vw, 150px" src="/services/quick-menu-v4/kakao-talk.jpg" unoptimized /></span>
           <strong>카카오 상담</strong>
         </a>
         <Link className="service-quick__item service-quick__item--action" href="/estimate">
-          <span className="service-quick__art"><Image alt="" fill priority sizes="(max-width: 600px) 22vw, 150px" unoptimized src="/services/quick-menu-v3/quick-estimate.gif" /></span>
+          <span className="service-quick__art"><Image alt="" fill priority sizes="(max-width: 600px) 22vw, 150px" unoptimized src="/services/quick-menu-v4/quick-estimate.jpg" /></span>
           <strong>얼마예요?</strong>
         </Link>
       </div>
