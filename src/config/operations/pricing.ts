@@ -8,6 +8,12 @@ export type PricePolicy = {
   serviceRates: Readonly<Record<string, { amount: number | null; unit: string; note: string }>>;
 };
 
+export type WasteCategoryRate = {
+  amount: number | null;
+  unit: "차량" | "현장";
+  note: string;
+};
+
 /**
  * Owns the public pricing contract independently from price-page presentation.
  * Change this object only after Solomon confirms its operating price sheet.
@@ -29,6 +35,17 @@ export const pricePolicy: PricePolicy = {
     "home-organizing": { amount: null, unit: "시간", note: "정리수납 기준 단가" },
   },
 };
+
+/**
+ * Waste-category rates stay separate because each category has a different
+ * estimation basis. Fill these fields only after the operating sheet is final.
+ */
+export const wasteCategoryRates = {
+  industrial: { amount: null, unit: "차량", note: "품목·물량·상차 및 처리 조건 기준" },
+  home: { amount: null, unit: "현장", note: "품목·수량·반출 동선 기준" },
+  living: { amount: null, unit: "현장", note: "부피·혼합도·분류 범위 기준" },
+  moving: { amount: null, unit: "현장", note: "물량·일정·반출 및 청소 연계 기준" },
+} as const satisfies Readonly<Record<string, WasteCategoryRate>>;
 
 /** Returns customer-facing copy for the configured VAT policy. */
 export function getVatPolicyLabel(status: VatPolicyStatus) {

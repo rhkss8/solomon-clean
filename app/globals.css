@@ -191,6 +191,12 @@ h1, h2, h3, p { margin-top: 0; }
 .price-list h2, .price-list p { margin: 0; }
 .price-list p { color: var(--text-secondary); }
 .price-list article > div:last-child { display: flex; align-items: center; gap: 18px; }
+.price-feature-link { display: grid; grid-template-columns: auto 1fr auto; gap: 24px; align-items: center; padding: 30px; color: var(--ink); background: white; border: 1px solid var(--border); transition: border-color .2s ease, transform .2s ease; }
+.price-feature-link:hover { border-color: var(--brand-primary); transform: translateY(-2px); }
+.price-feature-link > span { color: var(--brand-primary); font-weight: 900; }
+.price-feature-link strong { font-size: 22px; }
+.price-feature-link p { margin: 6px 0 0; color: var(--text-secondary); }
+.price-feature-link b { color: var(--brand-primary); }
 .price-calculator { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
 .price-calculator__form, .price-calculator__result { padding: 30px; border: 1px solid var(--border); background: white; }
 .price-calculator__form { display: grid; gap: 18px; }
@@ -217,6 +223,68 @@ h1, h2, h3, p { margin-top: 0; }
 .price-calculator__result p { color: var(--text-secondary); line-height: 1.7; }
 .price-calculator__result ul { margin: 24px 0; padding-left: 20px; color: var(--text-secondary); }
 .price-calculator__result li + li { margin-top: 9px; }
+.waste-price-hero { padding: 72px 0 92px; background: linear-gradient(125deg, #15171a 0 68%, var(--brand-primary) 68%); color: white; }
+.waste-price-hero--overview { padding-block: 100px; }
+.waste-price-hero .container > h1 { max-width: 850px; margin: 18px 0 24px; font-size: clamp(42px, 6vw, 72px); line-height: 1.08; letter-spacing: -.055em; }
+.waste-price-hero .container > p { max-width: 680px; color: rgba(255,255,255,.72); font-size: 18px; }
+.waste-price-hero .eyebrow { color: #ffb7b2; }
+.waste-price-hero__actions { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 10px; }
+.waste-price-hero .button--secondary { border-color: rgba(255,255,255,.45); color: white; }
+.waste-price-hero .button--secondary:hover { border-color: white; background: rgba(255,255,255,.08); }
+.waste-price-tabs { margin-bottom: 58px; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+.waste-price-tabs a { flex: 0 0 auto; min-width: 76px; padding: 9px 14px; border: 1px solid rgba(255,255,255,.26); border-radius: 999px; color: rgba(255,255,255,.72); text-align: center; font-size: 14px; font-weight: 750; }
+.waste-price-tabs a[aria-current="page"], .waste-price-tabs a:hover { border-color: white; background: white; color: var(--ink); }
+.waste-category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.waste-category-grid > a { min-height: 300px; padding: 34px; display: flex; flex-direction: column; background: white; border: 1px solid var(--border); transition: .2s ease; }
+.waste-category-grid > a:hover { border-color: var(--brand-primary); transform: translateY(-3px); box-shadow: var(--shadow); }
+.waste-category-grid span { color: var(--brand-primary); font-size: 12px; font-weight: 900; }
+.waste-category-grid h3 { margin: 58px 0 12px; font-size: 30px; letter-spacing: -.04em; }
+.waste-category-grid p { color: var(--text-secondary); }
+.waste-category-grid strong { margin-top: auto; color: var(--brand-primary); }
+.waste-estimate-principles { display: grid; grid-template-columns: .8fr 1.2fr; gap: 80px; }
+.waste-estimate-principles h2 { margin: 10px 0 20px; font-size: clamp(32px, 4vw, 48px); line-height: 1.16; letter-spacing: -.045em; }
+.waste-estimate-principles > div > p { color: var(--text-secondary); }
+.waste-estimate-principles dl { margin: 0; border-top: 2px solid var(--ink); }
+.waste-estimate-principles dl div { padding: 22px 0; display: grid; grid-template-columns: 150px 1fr; gap: 20px; border-bottom: 1px solid var(--border); }
+.waste-estimate-principles dt { font-weight: 850; }
+.waste-estimate-principles dd { margin: 0; color: var(--text-secondary); }
+.waste-rate-summary { padding: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; border: 1px solid var(--border); background: white; }
+.waste-rate-summary h2 { margin: 10px 0 8px; font-size: clamp(30px, 4vw, 44px); letter-spacing: -.045em; }
+.waste-rate-summary p { margin: 0; color: var(--text-secondary); }
+.waste-rate-summary dl { margin: 0; display: grid; gap: 12px; }
+.waste-rate-summary dl div { padding: 17px 20px; background: var(--surface-subtle); }
+.waste-rate-summary dt { font-weight: 850; }
+.waste-rate-summary dd { margin: 5px 0 0; color: var(--text-secondary); font-size: 14px; }
+.waste-factor-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.waste-factor-grid article { min-height: 250px; padding: 28px; background: white; border-top: 3px solid var(--brand-primary); }
+.waste-factor-grid span { color: var(--brand-primary); font-size: 12px; font-weight: 900; }
+.waste-factor-grid h3 { margin: 54px 0 12px; font-size: 22px; }
+.waste-factor-grid p { color: var(--text-secondary); font-size: 14px; }
+.waste-price-details { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+.waste-price-details h2, .waste-price-faq h2, .waste-price-process h2 { margin: 10px 0 28px; font-size: clamp(30px, 4vw, 44px); line-height: 1.16; letter-spacing: -.045em; }
+.waste-price-details ul, .waste-price-details ol { margin: 0; padding: 0; display: grid; gap: 10px; list-style: none; }
+.waste-price-details li { min-height: 60px; padding: 16px 18px; display: flex; align-items: center; gap: 14px; border: 1px solid var(--border); background: white; }
+.waste-price-details ul li::before { content: "✓"; color: var(--brand-primary); font-weight: 900; }
+.waste-price-details ol span { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: var(--brand-soft); color: var(--brand-primary); font-size: 12px; font-weight: 900; }
+.waste-price-process { display: grid; grid-template-columns: .8fr 1.2fr; gap: 80px; }
+.waste-price-process .eyebrow { color: #ffb7b2; }
+.waste-price-process > ol { margin: 0; padding: 0; display: grid; list-style: none; border-top: 1px solid #45494e; }
+.waste-price-process li { padding: 22px 0; display: grid; grid-template-columns: 52px 1fr; gap: 18px; border-bottom: 1px solid #45494e; }
+.waste-price-process li > span { color: #ffb7b2; font-size: 12px; font-weight: 900; }
+.waste-price-process strong { font-size: 18px; }
+.waste-price-process p { margin: 5px 0 0; color: #bfc4c8; }
+.waste-price-faq { display: grid; grid-template-columns: .8fr 1.2fr; gap: 80px; }
+.waste-price-faq details { border-top: 1px solid var(--border); }
+.waste-price-faq details:last-child { border-bottom: 1px solid var(--border); }
+.waste-price-faq summary { padding: 22px 4px; cursor: pointer; font-weight: 800; }
+.waste-price-faq details p { padding: 0 4px 22px; color: var(--text-secondary); line-height: 1.75; }
+.waste-price-cta { padding: 70px 0; background: var(--brand-primary); color: white; }
+.waste-price-cta .container { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 50px; }
+.waste-price-cta .eyebrow { color: rgba(255,255,255,.65); }
+.waste-price-cta h2 { margin: 8px 0 10px; font-size: clamp(30px, 4vw, 45px); line-height: 1.15; letter-spacing: -.045em; }
+.waste-price-cta p { margin: 0; color: rgba(255,255,255,.75); }
+.button--light { background: white; color: var(--brand-primary); }
+.button--light:hover { transform: translateY(-1px); }
 .process-grid { margin-top: 40px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 .process-grid article { min-height: 160px; padding: 22px; background: white; border: 1px solid var(--border); }
 .process-grid span { color: var(--brand-primary); font-size: 12px; font-weight: 850; }
@@ -299,6 +367,8 @@ h1, h2, h3, p { margin-top: 0; }
   .post-grid { grid-template-columns: repeat(2, 1fr); }
   .price-list article { grid-template-columns: 1fr; }
   .process-grid { grid-template-columns: repeat(2, 1fr); }
+  .waste-factor-grid { grid-template-columns: repeat(2, 1fr); }
+  .waste-estimate-principles, .waste-rate-summary, .waste-price-details, .waste-price-process, .waste-price-faq { grid-template-columns: 1fr; gap: 42px; }
 }
 
 @media (max-width: 600px) {
@@ -313,6 +383,18 @@ h1, h2, h3, p { margin-top: 0; }
   .section-heading { align-items: start; flex-direction: column; }
   .service-grid, .region-grid, .reason-grid, .post-grid, .process-grid, .form-grid, .footer-grid { grid-template-columns: 1fr; }
   .price-policy dl { grid-template-columns: 1fr; }
+  .price-feature-link { grid-template-columns: auto 1fr; padding: 24px 20px; }
+  .price-feature-link b { grid-column: 2; }
+  .waste-price-hero { padding: 42px 0 68px; background: #15171a; }
+  .waste-price-hero--overview { padding-block: 72px; }
+  .waste-price-hero .container > h1 { font-size: 40px; }
+  .waste-price-tabs { margin-bottom: 42px; }
+  .waste-category-grid, .waste-factor-grid { grid-template-columns: 1fr; }
+  .waste-category-grid > a { min-height: 250px; padding: 28px; }
+  .waste-estimate-principles dl div { grid-template-columns: 1fr; gap: 6px; }
+  .waste-rate-summary { padding: 26px 20px; }
+  .waste-price-cta .container { grid-template-columns: 1fr; }
+  .waste-price-cta .button { width: 100%; }
   .reason-card { min-height: 190px; border-right: 0; border-bottom: 1px solid #42474d; padding: 26px 0; }
   .reason-card + .reason-card { padding-left: 0; }
   .reason-card h3 { margin-top: 36px; }
