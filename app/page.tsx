@@ -47,11 +47,11 @@ export default async function HomePage() {
       <section className="quick-hero">
         <div className="container">
           <h1>간편한 신청. <span>빠른 무료견적.</span></h1>
-          <p>내가 찾던 청소·폐기·정리 서비스,<br className="mobile-only" /> 청소하는사람들에 다 있어요.</p>
+          <p>내가 찾던 청소·폐기·정리 서비스,<br className="mobile-only" /> 솔로몬종합청소에 다 있어요.</p>
           <ServiceQuickMenu />
           <div className="quick-hero__actions">
-            <Link href="/estimate">24시 무료견적 받기 🎧</Link>
-            <Link href="/prices">🤔 평균비용 확인하기</Link>
+            <Link href="/estimate">1분 무료견적 신청</Link>
+            <Link href="/prices">비용 안내 보기</Link>
           </div>
           <div className="quick-hero__help">
             <div><span><Image alt="비용을 확인하는 고객" fill sizes="64px" src="/home/avatars/cost-customer-v2.jpg" /></span><p><strong>얼마인지 궁금하다면?</strong><Link href="/prices">예상 비용을 확인해보세요</Link></p></div>
@@ -76,7 +76,7 @@ export default async function HomePage() {
 
       <section className="home-trust section">
         <div className="container">
-          <div className="home-trust__heading"><p>복잡한 현장도</p><h2>청소하는사람들이<br />함께하면 달라집니다.</h2></div>
+          <div className="home-trust__heading"><p>복잡한 현장도</p><h2>솔로몬종합청소가<br />함께하면 달라집니다.</h2></div>
           <div className="home-trust__stats">
             <div><strong>{services.length}개</strong><span>전문 서비스</span></div>
             <div><strong>전국</strong><span>상담 가능 지역</span></div>
@@ -98,7 +98,7 @@ export default async function HomePage() {
         <div className="container">
           <div className="quality-section__heading"><span>OUR STANDARD</span><h2>가격만 비교하기 전에<br />이 기준부터 확인하세요.</h2></div>
           <div className="quality-compare">
-            <div className="quality-compare__head"><strong>확인하지 않으면 불안한 것</strong><strong>청소하는사람들의 상담 기준</strong></div>
+            <div className="quality-compare__head"><strong>확인하지 않으면 불안한 것</strong><strong>솔로몬종합청소의 상담 기준</strong></div>
             {[
               ["현장에서 금액이 달라지지 않을까요?", "사진과 현장 조건으로 변동 요소를 먼저 확인합니다."],
               ["어디까지 작업해주는지 알 수 있나요?", "포함 범위와 제외 범위를 작업 전에 안내합니다."],
@@ -119,7 +119,7 @@ export default async function HomePage() {
 
       <section className="proof-section section">
         <div className="container">
-          <div className="proof-section__intro"><span>RESULT</span><h2>말보다 작업 결과로<br />확인해보세요.</h2><p>현장의 상태와 작업 범위는 모두 다릅니다. 실제 작업 기록을 통해 청소하는사람들의 현장 대응 방식을 확인하세요.</p><Link href="/portfolio">작업사례 전체 보기 →</Link></div>
+          <div className="proof-section__intro"><span>RESULT</span><h2>말보다 작업 결과로<br />확인해보세요.</h2><p>현장의 상태와 작업 범위는 모두 다릅니다. 실제 작업 기록을 통해 솔로몬종합청소의 현장 대응 방식을 확인하세요.</p><Link href="/portfolio">작업사례 전체 보기 →</Link></div>
           <div className="before-after-grid">
             {workPairs.map(([before, after, title]) => <article key={title}><div className="before-after-grid__images"><figure><Image src={before} alt={`${title} 작업 전`} fill sizes="(max-width: 600px) 43vw, 260px" /><span>BEFORE</span></figure><figure><Image src={after} alt={`${title} 작업 후`} fill sizes="(max-width: 600px) 43vw, 260px" /><span>AFTER</span></figure></div><h3>{title}</h3></article>)}
           </div>
@@ -142,7 +142,7 @@ export default async function HomePage() {
       </section>
 
       <section className="brand-message section">
-        <div className="container"><div className="brand-message__mark"><Image src="/brand/cleaning-people-mark.png" alt="" width={160} height={160} /></div><div><span>OUR MESSAGE</span><h2>깨끗한 공간이<br />새로운 시작이 되도록.</h2><p>청소하는사람들은 단순히 보이는 곳만 정리하는 서비스를 넘어, 고객이 다시 편안하게 생활을 시작할 수 있도록 돕고자 합니다.</p><p>현장마다 다른 사정과 고민을 존중하고, 필요한 범위를 솔직하게 안내하며, 끝까지 소통하는 팀이 되겠습니다.</p><strong>청소하는사람들 드림</strong></div></div>
+        <div className="container"><div className="brand-message__mark"><Image src={siteConfig.brand.markSrc} alt="" width={160} height={160} /></div><div><span>OUR MESSAGE</span><h2>깨끗한 공간이<br />새로운 시작이 되도록.</h2><p>솔로몬종합청소는 단순히 보이는 곳만 정리하는 서비스를 넘어, 고객이 다시 편안하게 생활을 시작할 수 있도록 돕고자 합니다.</p><p>현장마다 다른 사정과 고민을 존중하고, 필요한 범위를 솔직하게 안내하며, 끝까지 소통하는 팀이 되겠습니다.</p><strong>솔로몬종합청소 드림</strong></div></div>
       </section>
 
       <section className="home-final-cta">

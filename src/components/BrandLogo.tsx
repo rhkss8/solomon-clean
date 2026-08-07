@@ -8,10 +8,10 @@ import { siteConfig } from "@/src/domain/site";
 export function BrandLogo({ inverse = false }: { inverse?: boolean }) {
   return (
     <Link className={`brand-logo ${inverse ? "brand-logo--inverse" : ""}`} href="/">
-      <Image className="brand-logo__image" src="/brand/cleaning-people-mark.png" alt="" width={44} height={44} priority />
+      <Image className="brand-logo__image" src={siteConfig.brand.markSrc} alt="" width={48} height={48} priority />
       <span>
         <strong>{siteConfig.shortName}</strong>
-        <small>CLEANING PEOPLE</small>
+        <small>{siteConfig.brand.englishName}</small>
       </span>
     </Link>
   );

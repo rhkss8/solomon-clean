@@ -17,8 +17,8 @@ export const metadata: Metadata = {
   creator: siteConfig.name,
   publisher: siteConfig.name,
   category: "청소 서비스",
-  keywords: ["입주청소", "이사청소", "상가청소", "특수청소", "폐기물처리", "청소견적", "청소하는사람들"],
-  icons: { icon: "/favicon.svg" },
+  keywords: ["입주청소", "이사청소", "상가청소", "특수청소", "폐기물처리", "청소견적", "솔로몬종합청소"],
+  icons: { icon: siteConfig.brand.markSrc, apple: siteConfig.brand.markSrc },
   openGraph: {
     type: "website",
     locale: "ko_KR",

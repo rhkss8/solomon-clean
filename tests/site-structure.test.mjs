@@ -7,7 +7,8 @@ const projectFile = (path) => new URL(`../${path}`, import.meta.url);
 test("keeps brand and contact settings centralized", async () => {
   const siteDomain = await readFile(projectFile("src/domain/site.ts"), "utf8");
 
-  assert.match(siteDomain, /name:\s*"청소하는사람들"/);
+  assert.match(siteDomain, /name:\s*"솔로몬종합청소"/);
+  assert.match(siteDomain, /markSrc:\s*"\/brand\/solomon-mark\.png"/);
   assert.match(siteDomain, /serviceArea:\s*"전국"/);
   assert.match(siteDomain, /solomon_clean/);
   assert.match(siteDomain, /export const services/);

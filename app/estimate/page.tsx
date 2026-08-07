@@ -4,7 +4,7 @@ import { Suspense } from "react";
 
 export const metadata = createPageMetadata({
   title: "청소·폐기물 무료견적 요청",
-  description: "현장 정보와 사진을 보내 청소하는사람들의 무료견적 상담을 요청하세요.",
+  description: "현장 정보와 사진을 보내 솔로몬종합청소의 무료견적 상담을 요청하세요.",
   path: "/estimate",
 });
 

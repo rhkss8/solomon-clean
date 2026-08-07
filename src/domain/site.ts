@@ -9,11 +9,11 @@ import { contactConfig } from "../config/operations/contact.ts";
 const deployedSiteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : undefined;
 
 export const siteConfig = {
-  name: "청소하는사람들",
-  shortName: "청소하는사람들",
+  name: "솔로몬종합청소",
+  shortName: "솔로몬종합청소",
   description:
     "입주·이사·상업공간·특수청소와 폐기물 처리까지 전국에서 상담할 수 있는 종합청소 서비스입니다.",
-  shareTitle: "청소하는사람들 | 청소부터 폐기물 처리까지, 한 번에",
+  shareTitle: "솔로몬종합청소 | 청소부터 폐기물 처리까지, 한 번에",
   shareDescription:
     "입주·이사청소부터 상가·특수청소, 폐기물 처리까지 사진으로 빠르게 무료견적을 받아보세요.",
   shareImage: "/og.png",
@@ -27,8 +27,8 @@ export const siteConfig = {
   serviceArea: "전국",
   brand: {
     logoMode: "wordmark" as const,
-    logoLightSrc: "/brand/logo-light.svg",
-    logoDarkSrc: "/brand/logo-dark.svg",
+    markSrc: "/brand/solomon-mark.png",
+    englishName: "SOLOMON CLEANING",
   },
 } as const;
 
@@ -61,7 +61,7 @@ export type CleaningService = {
  * Services are modeled as content data instead of hard-coded page branches.
  * Dynamic routes, navigation, sitemap entries, and estimate options share it.
  */
-export const services: readonly CleaningService[] = [
+export const services = [
   {
     slug: "move-in-cleaning",
     name: "입주·이사청소",
@@ -161,7 +161,13 @@ export const services: readonly CleaningService[] = [
     highlights: ["공간 진단", "분류·배치", "유지 방법 안내"],
     priceBasis: "공간 수·물량·작업 인원에 따라 상담",
   },
-] as const;
+] as const satisfies readonly CleaningService[];
+
+export type ServiceSlug = (typeof services)[number]["slug"];
+
+export function isServiceSlug(value: string): value is ServiceSlug {
+  return services.some((service) => service.slug === value);
+}
 
 export function getServiceBySlug(slug: string) {
   return services.find((service) => service.slug === slug);
