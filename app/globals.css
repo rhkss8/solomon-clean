@@ -197,6 +197,34 @@ h1, h2, h3, p { margin-top: 0; }
 .price-feature-link strong { font-size: 22px; }
 .price-feature-link p { margin: 6px 0 0; color: var(--text-secondary); }
 .price-feature-link b { color: var(--brand-primary); }
+.prices-hub { background: white; }
+.prices-hub__hero { padding: 92px 0 52px; background: white; }
+.prices-hub__hero h1 { margin: 18px 0 24px; font-size: clamp(48px, 7vw, 88px); line-height: 1.02; letter-spacing: -.065em; }
+.prices-hub__hero p { max-width: 650px; color: var(--text-secondary); font-size: 19px; }
+.prices-hub__catalog { padding: 18px 0 100px; background: white; }
+.price-service-catalog { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.price-service-catalog > a { position: relative; min-height: 245px; padding: 28px 30px; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border); background: var(--surface-subtle); transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+.price-service-catalog > a::after { content: ""; position: absolute; right: -50px; bottom: -70px; width: 180px; height: 180px; border-radius: 50%; background: var(--brand-soft); transition: transform .25s ease; }
+.price-service-catalog > a:hover { z-index: 1; border-color: var(--brand-primary); transform: translateY(-3px); box-shadow: var(--shadow); }
+.price-service-catalog > a:hover::after { transform: scale(1.15); }
+.price-service-catalog__number { position: relative; z-index: 1; color: var(--brand-primary); font-size: 12px; font-weight: 900; }
+.price-service-catalog > a > div { position: relative; z-index: 1; margin-top: 34px; }
+.price-service-catalog small { display: block; color: var(--text-secondary); font-weight: 750; }
+.price-service-catalog strong { margin-top: 5px; display: block; font-size: 29px; letter-spacing: -.04em; }
+.price-service-catalog p { margin: 7px 0 0; color: var(--text-secondary); font-size: 14px; }
+.price-service-catalog b { position: relative; z-index: 1; margin-top: auto; color: var(--brand-primary); font-size: 14px; }
+.price-principle-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid #42474d; }
+.price-principle-grid article { min-height: 260px; padding: 28px 30px 28px 0; border-right: 1px solid #42474d; }
+.price-principle-grid article + article { padding-left: 30px; }
+.price-principle-grid article:last-child { border-right: 0; }
+.price-principle-grid span { color: #ffb7b2; font-size: 12px; font-weight: 900; }
+.price-principle-grid h3 { margin: 68px 0 12px; font-size: 23px; }
+.price-principle-grid p { color: #bfc4c8; }
+.prices-hub__proof { padding: 82px 0; background: white; }
+.prices-hub__proof .container { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 70px; }
+.prices-hub__proof h2 { margin: 10px 0 18px; font-size: clamp(36px, 5vw, 58px); line-height: 1.12; letter-spacing: -.055em; }
+.prices-hub__proof p { max-width: 650px; margin: 0; color: var(--text-secondary); }
+.prices-hub__proof-actions { min-width: 210px; display: grid; gap: 10px; }
 .price-calculator { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
 .price-calculator__form, .price-calculator__result { padding: 30px; border: 1px solid var(--border); background: white; }
 .price-calculator__form { display: grid; gap: 18px; }
@@ -367,6 +395,8 @@ h1, h2, h3, p { margin-top: 0; }
   .post-grid { grid-template-columns: repeat(2, 1fr); }
   .price-list article { grid-template-columns: 1fr; }
   .process-grid { grid-template-columns: repeat(2, 1fr); }
+  .prices-hub__proof .container { grid-template-columns: 1fr; align-items: start; gap: 34px; }
+  .prices-hub__proof-actions { width: min(100%, 340px); }
   .waste-factor-grid { grid-template-columns: repeat(2, 1fr); }
   .waste-estimate-principles, .waste-rate-summary, .waste-price-details, .waste-price-process, .waste-price-faq { grid-template-columns: 1fr; gap: 42px; }
 }
@@ -385,6 +415,14 @@ h1, h2, h3, p { margin-top: 0; }
   .price-policy dl { grid-template-columns: 1fr; }
   .price-feature-link { grid-template-columns: auto 1fr; padding: 24px 20px; }
   .price-feature-link b { grid-column: 2; }
+  .prices-hub__hero { padding: 68px 0 36px; }
+  .prices-hub__hero h1 { font-size: 46px; }
+  .prices-hub__hero p { font-size: 16px; }
+  .prices-hub__catalog { padding-bottom: 72px; }
+  .price-service-catalog, .price-principle-grid { grid-template-columns: 1fr; }
+  .price-service-catalog > a { min-height: 220px; padding: 24px; }
+  .price-principle-grid article, .price-principle-grid article + article { min-height: 0; padding: 26px 0; border-right: 0; border-bottom: 1px solid #42474d; }
+  .price-principle-grid h3 { margin-top: 32px; }
   .waste-price-hero { padding: 42px 0 68px; background: #15171a; }
   .waste-price-hero--overview { padding-block: 72px; }
   .waste-price-hero .container > h1 { font-size: 40px; }
