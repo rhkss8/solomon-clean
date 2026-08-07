@@ -1,9 +1,11 @@
 import Link from "next/link";
+import Image from "next/image";
 import { BlogPostGrid } from "@/src/components/BlogPostGrid";
 import { PriceGuideCalculator } from "@/src/components/PriceGuideCalculator";
 import { PricePolicyNotice } from "@/src/components/PricePolicyNotice";
 import { PriceServiceCatalog } from "@/src/components/PriceServiceCatalog";
 import { StructuredData } from "@/src/components/StructuredData";
+import { pricesPageContent } from "@/src/config/content/prices-page";
 import { formatPhoneNumber, siteConfig } from "@/src/domain/site";
 import { createPageMetadata } from "@/src/lib/metadata";
 import { getBlogPosts } from "@/src/server/blog-feed";
@@ -88,6 +90,20 @@ export default async function PricesPage() {
         </div>
       </section>
 
+      <section className="section prices-assurance">
+        <div className="container">
+          <div className="section-heading"><div><span className="eyebrow">SERVICE ASSURANCE</span><h2>가격 안내만 하지 않고,<br />끝까지 확인합니다.</h2></div><p>보장 범위와 증빙 데이터는 실제 운영 자료가 확정되면 설정 파일에서 교체됩니다.</p></div>
+          <div className="prices-assurance__grid">{pricesPageContent.assurances.map((item) => <article key={item.symbol}><span>{item.symbol}</span><h3>{item.title}</h3><strong>{item.value}</strong><p>{item.description}</p></article>)}</div>
+        </div>
+      </section>
+
+      <section className="section prices-performance">
+        <div className="container">
+          <div className="prices-performance__heading"><span>{pricesPageContent.performance.eyebrow}</span><h2>{pricesPageContent.performance.headline.split("\n").map((line) => <span key={line}>{line}</span>)}</h2><p>{pricesPageContent.performance.description}</p></div>
+          <div className="prices-case-grid">{pricesPageContent.cases.map((item) => <article key={item.title}><div><figure><Image alt={`${item.title} 작업 전`} fill sizes="(max-width: 700px) 50vw, 280px" src={item.before} /><span>BEFORE</span></figure><figure><Image alt={`${item.title} 작업 후`} fill sizes="(max-width: 700px) 50vw, 280px" src={item.after} /><span>AFTER</span></figure></div><h3>{item.title}</h3><p>📍 {item.area}</p><ul><li>{item.scale}</li><li>{item.duration}</li><li>{item.price}</li></ul><Link href="/portfolio">상세보기 →</Link></article>)}</div>
+        </div>
+      </section>
+
       <section className="section section--subtle">
         <div className="container">
           <div className="section-heading">
@@ -120,6 +136,13 @@ export default async function PricesPage() {
             <div className="prices-comparison__head" role="row"><strong role="columnheader">확인해야 할 상황</strong><strong role="columnheader">솔로몬 안내 방식</strong></div>
             {estimateComparison.map((item) => <div key={item.concern} role="row"><p role="cell"><span>!</span>{item.concern}</p><p role="cell"><span>✓</span>{item.response}</p></div>)}
           </div>
+        </div>
+      </section>
+
+      <section className="section prices-review">
+        <div className="container">
+          <div className="prices-review__heading"><span className="eyebrow">CUSTOMER VOICE</span><h2>쉽고 편하게<br />상담했어요.</h2><p>실제 후기 데이터가 정리되면 같은 카드 구조에 교체할 수 있습니다.</p></div>
+          <div className="prices-review__cards">{pricesPageContent.reviews.map((review) => <article key={review.title}><div>{review.rating}</div><h3>{review.title}</h3><p>{review.body}</p><small>{review.customer}</small></article>)}</div>
         </div>
       </section>
 

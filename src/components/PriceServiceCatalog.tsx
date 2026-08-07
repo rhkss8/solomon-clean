@@ -1,8 +1,11 @@
 import Link from "next/link";
+import { pricesPageContent } from "@/src/config/content/prices-page";
 import { pricePolicy } from "@/src/config/operations/pricing";
 import { services } from "@/src/domain/site";
 
 function getServicePriceLabel(serviceSlug: string) {
+  const draftPrice = pricesPageContent.servicePrices[serviceSlug as keyof typeof pricesPageContent.servicePrices];
+  if (pricesPageContent.status === "draft" && draftPrice) return draftPrice;
   const rate = pricePolicy.serviceRates[serviceSlug];
   if (!rate || rate.amount === null || pricePolicy.publicationStatus === "consultation-only") {
     return "상담 견적";
@@ -34,4 +37,3 @@ export function PriceServiceCatalog() {
     </div>
   );
 }
-
