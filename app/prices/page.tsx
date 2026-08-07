@@ -1,9 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { BlogPostGrid } from "@/src/components/BlogPostGrid";
-import { PriceGuideCalculator } from "@/src/components/PriceGuideCalculator";
 import { PricePolicyNotice } from "@/src/components/PricePolicyNotice";
 import { PriceServiceCatalog } from "@/src/components/PriceServiceCatalog";
+import { ServiceQuickMenu } from "@/src/components/ServiceQuickMenu";
 import { StructuredData } from "@/src/components/StructuredData";
 import { pricesPageContent } from "@/src/config/content/prices-page";
 import { formatPhoneNumber, siteConfig } from "@/src/domain/site";
@@ -104,13 +104,14 @@ export default async function PricesPage() {
         </div>
       </section>
 
-      <section className="section section--subtle">
+      <section className="section prices-quick-estimate">
         <div className="container">
           <div className="section-heading">
-            <div><span className="eyebrow">QUOTE CHECK</span><h2>내 현장은 어떤 상담이 필요할까요?</h2></div>
-            <p>간단한 조건을 선택하면 견적 정확도를 높이는 정보를 안내합니다.</p>
+            <div><span className="eyebrow">QUICK ESTIMATE</span><h2>필요한 서비스를<br />바로 선택하세요.</h2></div>
+            <p>복잡한 조건 선택 없이 서비스 아이콘을 누르면 해당 견적 접수로 바로 이동합니다.</p>
           </div>
-          <PriceGuideCalculator />
+          <ServiceQuickMenu destination="estimate" />
+          <div className="prices-quick-estimate__help"><span>서비스를 잘 모르겠다면?</span><a href={siteConfig.kakaoUrl} rel="noreferrer" target="_blank">사진으로 카카오 상담 →</a></div>
         </div>
       </section>
 

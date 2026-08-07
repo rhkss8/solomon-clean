@@ -226,6 +226,11 @@ h1, h2, h3, p { margin-top: 0; }
 .prices-hub__proof p { max-width: 650px; margin: 0; color: var(--text-secondary); }
 .prices-hub__proof-actions { min-width: 210px; display: grid; gap: 10px; }
 .prices-work-records { background: white; }
+.prices-quick-estimate { overflow: hidden; background: var(--surface-subtle); }
+.prices-quick-estimate .section-heading > p { max-width: 460px; color: var(--text-secondary); }
+.prices-quick-estimate .service-quick { margin-top: 6px; }
+.prices-quick-estimate__help { margin-top: 28px; display: flex; align-items: center; justify-content: center; gap: 14px; color: var(--text-secondary); font-size: 14px; }
+.prices-quick-estimate__help a { color: var(--brand-primary); font-weight: 850; }
 .prices-assurance { background: white; }
 .prices-assurance .section-heading > p { max-width: 460px; color: var(--text-secondary); }
 .prices-assurance__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
@@ -500,6 +505,8 @@ h1, h2, h3, p { margin-top: 0; }
   .prices-consultation { padding: 62px 0; }
   .prices-consultation .container > div:last-child { width: 100%; }
   .prices-assurance__grid { grid-template-columns: 1fr; }
+  .prices-quick-estimate .service-quick { margin-inline: -14px; padding-inline: 14px; }
+  .prices-quick-estimate__help { align-items: flex-start; flex-direction: column; }
   .prices-assurance__grid article { min-height: 250px; }
   .prices-review__cards { margin-inline: -14px; padding-inline: 14px; grid-template-columns: repeat(3, 82vw); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
   .prices-review__cards article { scroll-snap-align: start; }
