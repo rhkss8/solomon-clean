@@ -225,6 +225,35 @@ h1, h2, h3, p { margin-top: 0; }
 .prices-hub__proof h2 { margin: 10px 0 18px; font-size: clamp(36px, 5vw, 58px); line-height: 1.12; letter-spacing: -.055em; }
 .prices-hub__proof p { max-width: 650px; margin: 0; color: var(--text-secondary); }
 .prices-hub__proof-actions { min-width: 210px; display: grid; gap: 10px; }
+.prices-work-records { background: white; }
+.prices-work-records .section-heading > p, .prices-comparison .section-heading > p { max-width: 460px; color: var(--text-secondary); }
+.prices-comparison { background: var(--surface-subtle); }
+.prices-comparison__table { border-top: 2px solid var(--ink); }
+.prices-comparison__head, .prices-comparison__table > div:not(.prices-comparison__head) { display: grid; grid-template-columns: 1fr 1fr; }
+.prices-comparison__head { background: var(--ink); color: white; }
+.prices-comparison__head strong { padding: 18px 24px; }
+.prices-comparison__head strong + strong { border-left: 1px solid #44494f; }
+.prices-comparison__table > div:not(.prices-comparison__head) { border-bottom: 1px solid var(--border); background: white; }
+.prices-comparison__table p { min-height: 76px; margin: 0; padding: 20px 24px; display: flex; align-items: center; gap: 14px; }
+.prices-comparison__table p + p { border-left: 1px solid var(--border); }
+.prices-comparison__table p span { width: 28px; height: 28px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 50%; background: #f2e7e6; color: var(--brand-primary); font-size: 12px; font-weight: 900; }
+.prices-comparison__table p + p span { background: var(--brand-soft); }
+.prices-consultation { padding: 72px 0; background: var(--brand-primary); color: white; }
+.prices-consultation .container { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 70px; }
+.prices-consultation .eyebrow { color: rgba(255,255,255,.7); }
+.prices-consultation h2 { margin: 8px 0 12px; font-size: clamp(34px, 4.5vw, 52px); line-height: 1.12; letter-spacing: -.05em; }
+.prices-consultation p { max-width: 680px; margin: 0; color: rgba(255,255,255,.75); }
+.prices-consultation .container > div:last-child { min-width: 220px; display: grid; gap: 10px; }
+.prices-consultation a { min-height: 52px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.7); border-radius: 8px; font-weight: 850; }
+.prices-consultation a:first-child { border-color: white; background: white; color: var(--brand-primary); }
+.prices-faq { background: white; }
+.prices-faq .container { display: grid; grid-template-columns: .8fr 1.2fr; gap: 80px; }
+.prices-faq h2 { margin: 10px 0 18px; font-size: clamp(34px, 4vw, 48px); line-height: 1.16; letter-spacing: -.045em; }
+.prices-faq > .container > div:first-child p { color: var(--text-secondary); }
+.prices-faq details { border-top: 1px solid var(--border); }
+.prices-faq details:last-child { border-bottom: 1px solid var(--border); }
+.prices-faq summary { padding: 22px 4px; cursor: pointer; font-size: 17px; font-weight: 800; }
+.prices-faq details p { padding: 0 4px 22px; color: var(--text-secondary); line-height: 1.75; }
 .price-calculator { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
 .price-calculator__form, .price-calculator__result { padding: 30px; border: 1px solid var(--border); background: white; }
 .price-calculator__form { display: grid; gap: 18px; }
@@ -397,6 +426,8 @@ h1, h2, h3, p { margin-top: 0; }
   .process-grid { grid-template-columns: repeat(2, 1fr); }
   .prices-hub__proof .container { grid-template-columns: 1fr; align-items: start; gap: 34px; }
   .prices-hub__proof-actions { width: min(100%, 340px); }
+  .prices-consultation .container, .prices-faq .container { grid-template-columns: 1fr; gap: 40px; }
+  .prices-consultation .container > div:last-child { width: min(100%, 340px); }
   .waste-factor-grid { grid-template-columns: repeat(2, 1fr); }
   .waste-estimate-principles, .waste-rate-summary, .waste-price-details, .waste-price-process, .waste-price-faq { grid-template-columns: 1fr; gap: 42px; }
 }
@@ -423,6 +454,12 @@ h1, h2, h3, p { margin-top: 0; }
   .price-service-catalog > a { min-height: 220px; padding: 24px; }
   .price-principle-grid article, .price-principle-grid article + article { min-height: 0; padding: 26px 0; border-right: 0; border-bottom: 1px solid #42474d; }
   .price-principle-grid h3 { margin-top: 32px; }
+  .prices-comparison__head { display: none; }
+  .prices-comparison__table > div:not(.prices-comparison__head) { grid-template-columns: 1fr; }
+  .prices-comparison__table p { min-height: 0; padding: 18px; }
+  .prices-comparison__table p + p { border-left: 0; border-top: 1px dashed var(--border); }
+  .prices-consultation { padding: 62px 0; }
+  .prices-consultation .container > div:last-child { width: 100%; }
   .waste-price-hero { padding: 42px 0 68px; background: #15171a; }
   .waste-price-hero--overview { padding-block: 72px; }
   .waste-price-hero .container > h1 { font-size: 40px; }
