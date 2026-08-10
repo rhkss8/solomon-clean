@@ -4,7 +4,7 @@ import { serviceImages } from "@/src/config/service-images";
 import { siteConfig } from "@/src/domain/site";
 
 const quickServices = [
-  { href: "/services/move-in-cleaning", label: "입주·이사·준공청소", image: serviceImages["move-in-cleaning"] },
+  { href: "/services/move-in-cleaning", label: "입주·이사·준공청소", image: serviceImages["move-in-cleaning"], imageClassName: "service-quick__art--move-in" },
   { href: "/services/waste-disposal", label: "폐기물처리", image: serviceImages["waste-disposal"] },
   { href: "/services/hoarding-cleanup", label: "쓰레기집청소", image: serviceImages["hoarding-cleanup"] },
   { href: "/services/deep-cleaning", label: "특수청소", image: serviceImages["deep-cleaning"] },
@@ -29,7 +29,7 @@ export function ServiceQuickMenu({ destination = "service" }: ServiceQuickMenuPr
       <div className="service-quick__track">
         {quickServices.map((service) => (
           <Link className="service-quick__item" href={createQuickServiceHref(service.href, destination)} key={service.label}>
-            <span className="service-quick__art">
+            <span className={`service-quick__art ${"imageClassName" in service ? service.imageClassName : ""}`}>
               <Image alt="" fill priority sizes="(max-width: 600px) 22vw, 150px" src={service.image} unoptimized />
             </span>
             <strong>{service.label}</strong>
