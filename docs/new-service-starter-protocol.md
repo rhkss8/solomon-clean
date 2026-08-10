@@ -4,15 +4,14 @@
 
 For every new service, start from the same operating structure.
 
-Before generating anything, run `docs/project-start-checklist.md`.
+The only required custom inputs are:
 
-The starter must distinguish between:
+- Service definition.
+- Target persona.
+- Core user pain.
+- Desired user transformation.
 
-- Information already confirmed in conversation or project sources.
-- Safe placeholders.
-- Unknowns that block planning, visual direction, implementation, or launch.
-
-Do not ask users to repeat confirmed information. Do not treat brand identity, operations, privacy, integrations, or delivery requirements as late-stage polish.
+Everything else should be generated from the shared starter protocol.
 
 ## Required Inputs
 
@@ -155,25 +154,18 @@ As a [persona], I can [new ability], so that [meaningful outcome].
 
 ## New Project Kickoff Flow
 
-1. Read the current conversation, supplied references, project files, and existing decisions.
-2. Run `docs/project-start-checklist.md`.
-3. Show already-confirmed answers, safe placeholders, blocking questions, and readiness gates.
-4. Ask only the smallest batch of unanswered blocking questions.
-5. Update project documents with the answers.
-6. Define service, persona, pain, transformation, primary action, and non-goals.
-7. Write 1 to 3 superpowers.
-8. Generate G-Stack.
-9. Generate MVP todo.
-10. Run the design production pipeline only after the Visual Direction Gate is ready.
-11. Generate reference scan and 2 to 3 visual territories.
-12. Choose a visual direction and record the decision.
-13. Generate wireframe and high-fidelity screen plans.
-14. Generate design philosophy, interaction principles, design system, tone, review, and QA rules.
-15. Confirm the Implementation Gate.
-16. Generate frontend standards and technical contracts.
-17. Generate AI contracts if AI is part of the product.
-18. Generate analytics and QA gates.
-19. Start Phase 0 foundation.
+1. Define service in one sentence.
+2. Define primary persona.
+3. Define the user's before/after transformation.
+4. Write 1 to 3 superpowers.
+5. Generate G-Stack.
+6. Generate MVP todo.
+7. Route the first vertical slice through `docs/work-routing.md`.
+8. Create only the design, engineering, AI, analytics, and QA artifacts required by that slice.
+9. Record product-visible decisions as they are made.
+10. Expand domain contracts when a real implementation or release risk triggers them.
+
+Do not generate the entire documentation catalog before the first slice. The catalog is a capability library, not a mandatory kickoff report chain.
 
 ## Lesson-And-Run Memory
 

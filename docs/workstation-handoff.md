@@ -45,12 +45,11 @@ Recommended:
 
 ```bash
 git status
-git add docs src packages apps
-git commit -m "fix: 변경 내용 한글 요약"
+git add <files changed for this slice>
+git diff --cached
+git commit -m "<type>: 변경 내용 한글 요약"
 git push
 ```
-
-Adjust paths to match the project.
 
 ## Starting On Another PC
 
@@ -66,14 +65,15 @@ Commands:
 git pull
 tars doctor
 tars status
-tars next
 ```
 
 Then tell Codex:
 
 ```txt
-tars 기준으로 다음 todo 진행해줘.
+docs/reentry-protocol.md 기준으로 마지막 명시적 작업부터 이어서 진행해줘.
 ```
+
+Run `tars next` or `tars loop` only when no explicit or in-progress work exists and an autonomous build loop is intended.
 
 ## Environment Variables
 

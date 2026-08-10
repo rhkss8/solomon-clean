@@ -12,6 +12,8 @@ Product intent -> reference scan -> visual territories -> direction decision -> 
 
 New services should follow the same sequence before important UI work.
 
+Impeccable is an optional execution and QA aid within this pipeline, not a source of product or visual direction. Use it only after the product intent, reference scan, chosen direction, and composition model are established. When an Impeccable recommendation conflicts with approved references, the recorded direction, or the design system spec, those project artifacts win.
+
 ## Phase 1: Product Intent
 
 Inputs:

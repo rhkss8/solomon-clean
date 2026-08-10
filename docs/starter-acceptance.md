@@ -12,12 +12,15 @@ It is a lightweight validation layer, not a report template.
 
 - `tars` exists and is executable.
 - Required `docs/` files exist.
+- `.codex/skills/tars-orchestrator/SKILL.md` exists.
 - `.codex/skills/tars-maintenance/SKILL.md` exists.
 - `.codex/skills/tars-deep-thinking/SKILL.md` exists.
+- `docs/work-routing.md` exists.
 - `docs/deep-thinking-workflow.md` exists.
 - `docs/inbox/` and `docs/wiki/` exist.
 - `docs/wiki/schema.md` and `docs/wiki/index.md` exist.
-- `package.json` has `typecheck`, `lint`, `test`, and `format:check`.
+- Impeccable and other domain aids remain optional and are not core acceptance dependencies.
+- `scripts/test-tars.py` exists and exercises routing and dynamic verification behavior.
 
 ### 2. Smoke
 
@@ -26,6 +29,7 @@ It is a lightweight validation layer, not a report template.
 - `tars next` handles both open and empty todo states.
 - `tars wiki` handles an empty inbox without failing.
 - Python compilation of `tars` succeeds.
+- TARS behavior tests pass without optional design aids installed.
 
 ### 3. Function
 
@@ -34,7 +38,10 @@ It is a lightweight validation layer, not a report template.
 - `tars maintain --hard` points to the operating/release-grade maintenance workflow.
 - `tars think` points to the deep thinking skill and workflow.
 - `tars loop` briefs open todos and asks for confirmation.
-- `tars verify` runs the project checks.
+- `tars verify` validates TARS and runs only checks exposed by the current project's `package.json`.
+- `typecheck` and `type-check` script names are both supported.
+- A project may narrow final checks with `package.json` `tars.verify`; unselected scripts remain available for targeted manual verification.
+- The orchestrator selects one lead and the smallest useful team before loading domain references.
 
 ### 4. Safety
 
@@ -43,6 +50,9 @@ It is a lightweight validation layer, not a report template.
 - Hard maintenance requires broader evidence for production-facing, release, visual parity, or core-flow changes.
 - Deep thinking compares options and excludes off-scope work before large or ambiguous implementation.
 - Wiki is optional and not read for every task.
+- Explicit user work outranks autonomous todo selection.
+- Parallel workers have disjoint write scopes and return structured handoffs to one orchestrator.
+- Reviewers check named risks and do not duplicate implementation.
 - Failed verification blocks completion claims.
 
 ## Rule

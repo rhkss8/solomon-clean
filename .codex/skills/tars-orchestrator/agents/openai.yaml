@@ -1,0 +1,4 @@
+interface:
+  display_name: "TARS Orchestrator"
+  short_description: "Route work to the smallest responsible agent team"
+  default_prompt: "Classify this request, assign the minimal lead-worker-reviewer team, coordinate handoffs, and integrate verified results."

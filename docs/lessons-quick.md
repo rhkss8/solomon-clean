@@ -10,4 +10,3 @@ Read this before every TARS work cycle. Keep it short; move detailed history to 
 - Keep fixes small. Do not turn a correction into a redesign or broad refactor.
 - Verification is evidence. Do not claim completion without running checks or clearly reporting why checks could not run.
 - Promote rules gradually: repo docs first, project-local skill next, global skill only after repeated real use.
-- TARS 검증은 `.nvmrc`의 Node 버전을 활성화한 셸에서 실행한다.

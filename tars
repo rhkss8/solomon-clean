@@ -8,13 +8,14 @@ Run `tars` or `./tars` to see the command list.
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import subprocess
 import sys
 from pathlib import Path
 
 
-VERSION = "0.9.0"
+VERSION = "0.10.0"
 COMMAND = "tars"
 ROOT = Path.cwd()
 DOCS = ROOT / "docs"
@@ -173,7 +174,7 @@ def build_kickoff_prompt(values: dict[str, str]) -> str:
         transformation = values.get("transformation", "")
 
     return f"""이 프로젝트는 신규 서비스 MVP야.
-docs/project-start-checklist.md, docs/new-service-starter-protocol.md, docs/agent-runbook.md, docs/skills-and-agents.md, docs/lessons-quick.md를 기준으로 시작해줘.
+먼저 .codex/skills/tars-orchestrator/SKILL.md와 docs/work-routing.md로 요청을 분류한 뒤, 선택된 문서만 읽고 시작해줘.
 
 서비스 정의:
 {values["definition"]}
@@ -187,17 +188,10 @@ docs/project-start-checklist.md, docs/new-service-starter-protocol.md, docs/agen
 원하는 변화:
 {transformation}
 
-가장 먼저 할 일:
-1. 현재 대화, 사용자가 준 URL/파일/요구사항, 기존 docs와 코드에서 이미 확정된 정보를 추출해.
-2. docs/project-start-checklist.md의 모든 항목을 confirmed, assumed, unknown, not applicable로 점검해.
-3. 이미 대화에서 답이 나온 항목은 다시 묻지 마.
-4. 이미 확정된 것, 안전한 placeholder, 다음 단계의 blocking question, 단계별 readiness를 먼저 보여줘.
-5. blocking question만 3-7개씩 묶어 물어보고 답변을 문서에 반영해.
-6. Planning Gate를 통과한 뒤 기획을 정리해.
-7. Visual Direction Gate를 통과하기 전에는 로고, 대표색, 최종 디자인 방향을 임의로 확정하거나 UI 개발을 시작하지 마.
-8. Implementation Gate를 통과한 뒤에만 실제 구현을 시작해.
-
-그다음 G-Stack, Superpowers, MVP todo, 디자인 레퍼런스, 시각 방향 2-3안, 방향 선택, 와이어프레임 계획, 디자인 시스템, 서비스 디자인, 디자인 리뷰/QA, 개발 하네스, AI/QA/analytics 기준을 만들고 MVP core loop를 진행해.
+먼저 서비스 정의, G-Stack, Superpowers, MVP todo를 정리하고,
+첫 vertical slice에 필요한 디자인, 개발, AI, analytics, QA 계약만 만들고,
+중요 의사결정 지점은 물어보고,
+그 외에는 MVP core loop가 끝날 때까지 계속 진행해줘.
 
 작업별 스킬/문서 라우팅:
 - 제품 범위, MVP 우선순위, user flow: docs/mvp-execution-harness.md, docs/mvp-todo.md
@@ -283,7 +277,9 @@ def build_maintenance_prompt(hard: bool = False) -> str:
 
     if hard:
         mode_label = "운영급 유지보수 모드"
-        first_reads = """- .codex/skills/tars-maintenance/SKILL.md
+        first_reads = """- .codex/skills/tars-orchestrator/SKILL.md
+- docs/work-routing.md
+- .codex/skills/tars-maintenance/SKILL.md
 - docs/maintenance-workflow.md
 - docs/lessons-quick.md
 - docs/agent-runbook.md
@@ -303,7 +299,8 @@ def build_maintenance_prompt(hard: bool = False) -> str:
 9. 완료 보고에는 바꾼 파일, 실행한 체크, 남은 위험, 다음 확인 포인트를 포함해줘."""
     else:
         mode_label = "빠른 유지보수 모드"
-        first_reads = """- 현재 git diff/status
+        first_reads = """- docs/work-routing.md
+- 현재 git diff/status
 - 직접 관련 코드와 테스트
 - 직접 관련 source-of-truth 문서나 디자인 원본
 - .codex/skills/tars-maintenance/SKILL.md 또는 docs/maintenance-workflow.md는 절차가 헷갈릴 때만"""
@@ -423,13 +420,13 @@ def command_start() -> int:
 
 def required_files() -> list[str]:
     return [
-        "project-start-checklist.md",
         "new-service-starter-protocol.md",
         "agent-runbook.md",
         "service-definition.md",
         "g-stack.md",
         "superpowers.md",
         "mvp-todo.md",
+        "work-routing.md",
         "maintenance-workflow.md",
         "deep-thinking-workflow.md",
         "reentry-protocol.md",
@@ -439,6 +436,8 @@ def required_files() -> list[str]:
         "wiki/schema.md",
         "wiki/index.md",
         "design-production-pipeline.md",
+        "ui-quality-philosophy.md",
+        "visual-composition-rules.md",
         "design-reference-brief.md",
         "design-philosophy.md",
         "interaction-principles.md",
@@ -468,10 +467,10 @@ def command_doctor() -> int:
     missing_paths = [
         path
         for path in [
+            ".codex/skills/tars-orchestrator/SKILL.md",
             ".codex/skills/tars-maintenance/SKILL.md",
             ".codex/skills/tars-deep-thinking/SKILL.md",
-            "script/build_and_run.sh",
-            "package.json",
+            "scripts/test-tars.py",
             "tars",
         ]
         if not (ROOT / path).exists()
@@ -484,31 +483,23 @@ def command_doctor() -> int:
         print("Doctor: missing required project files")
         for path in missing_paths:
             print(f"- {path}")
-    package = read_text(ROOT / "package.json")
-    missing_scripts = [
-        script
-        for script in ["typecheck", "lint", "test", "format:check"]
-        if f'"{script}"' not in package
-    ]
-    if missing_scripts:
-        print("Doctor: missing package scripts")
-        for script in missing_scripts:
-            print(f"- {script}")
     acceptance_failures = acceptance_failures_only()
     if acceptance_failures:
         print("Doctor: starter acceptance failures")
         for failure in acceptance_failures:
             print(f"- {failure}")
-    if missing or missing_paths or missing_scripts or acceptance_failures:
+    if missing or missing_paths or acceptance_failures:
         return 1
 
     print("Doctor: ok")
     print(f"- root: {ROOT}")
     print(f"- docs: {DOCS}")
     print(f"- service definition: {'ready' if has_service_definition() else 'needs input'}")
+    print("- orchestrator skill: ready")
     print("- maintenance skill: ready")
     print("- deep thinking skill: ready")
-    print("- verification scripts: ready")
+    print(f"- project checks: {', '.join(label for label, _ in project_verification_checks()) or 'not configured yet'}")
+    print("- impeccable skill: optional")
     print("- starter acceptance: ready")
     return 0
 
@@ -522,11 +513,16 @@ def acceptance_checks() -> list[tuple[str, bool]]:
     return [
         ("structure: tars exists", (ROOT / "tars").exists()),
         ("structure: docs/agent-runbook.md exists", (DOCS / "agent-runbook.md").exists()),
+        ("structure: work routing exists", (DOCS / "work-routing.md").exists()),
+        ("structure: orchestrator skill exists", (ROOT / ".codex/skills/tars-orchestrator/SKILL.md").exists()),
         ("structure: maintenance skill exists", (ROOT / ".codex/skills/tars-maintenance/SKILL.md").exists()),
         ("structure: deep thinking skill exists", (ROOT / ".codex/skills/tars-deep-thinking/SKILL.md").exists()),
+        ("structure: TARS behavior tests exist", (ROOT / "scripts/test-tars.py").exists()),
         ("structure: inbox exists", (DOCS / "inbox").exists()),
         ("structure: wiki schema exists", (DOCS / "wiki/schema.md").exists()),
         ("structure: wiki index exists", (DOCS / "wiki/index.md").exists()),
+        ("structure: UI quality philosophy exists", (DOCS / "ui-quality-philosophy.md").exists()),
+        ("structure: visual composition rules exist", (DOCS / "visual-composition-rules.md").exists()),
         (
             "function: tars exposes maintain/verify/think/loop/wiki",
             contains_all(
@@ -543,8 +539,19 @@ def acceptance_checks() -> list[tuple[str, bool]]:
             contains_all("tars", ["tars think", "docs/deep-thinking-workflow.md", "tars-deep-thinking"]),
         ),
         (
-            "function: package scripts expose checks",
-            contains_all("package.json", ['"typecheck"', '"lint"', '"test"', '"format:check"']),
+            "routing: orchestrator owns team selection and integration",
+            contains_all(
+                ".codex/skills/tars-orchestrator/SKILL.md",
+                ["smallest responsible lead", "disjoint write scope", "Only the orchestrator reports completion"],
+            ),
+        ),
+        (
+            "routing: collaboration contract protects file ownership",
+            contains_all("docs/work-routing.md", ["one lead", "disjoint write scopes", "task brief"]),
+        ),
+        (
+            "routing: explicit user work blocks autonomous todo advance",
+            contains_all("docs/work-routing.md", ["latest user correction", "Automatically advancing to another todo"]),
         ),
         (
             "safety: decision gates include approval risks",
@@ -708,13 +715,13 @@ docs/inbox/의 원본 자료를 딱 한 번 정독한 뒤, docs/wiki/에 plain M
 
 
 def build_loop_prompt(next_todo: str) -> str:
-    return f"""docs/agent-runbook.md, docs/lessons-quick.md, docs/mvp-todo.md를 읽고 첫 번째 미완료 todo를 진행해줘.
+    return f""".codex/skills/tars-orchestrator/SKILL.md와 docs/work-routing.md로 작업을 먼저 라우팅하고, 필요한 문서만 읽어 첫 번째 미완료 todo를 진행해줘.
 
 다음 todo:
 - {next_todo}
 
 루프 규칙:
-1. 작업 성격에 맞는 문서와 project-local skill을 먼저 읽어라.
+1. action, domain, impact, uncertainty, source of truth를 분류하고 정확히 한 명의 lead를 정하라.
 2. 재진입/재개 상황이면 docs/reentry-protocol.md부터 따라라.
 3. 신규 MVP 생성/확장은 tars start 기준으로 진행하라.
 4. 기획, 설계, 큰 구현, 모호한 todo는 .codex/skills/tars-deep-thinking/SKILL.md와 docs/deep-thinking-workflow.md 기준으로 먼저 생각을 펼쳐라.
@@ -794,20 +801,67 @@ def command_done() -> int:
     if verify_result != 0:
         print("\n검증이 실패했습니다. 실패 원인을 수정한 뒤 다시 `tars done`을 실행하세요.")
         return verify_result
-    print("\nCommit this slice:")
-    print("git add .")
-    print('git commit -m "fix: 변경 내용 한글 요약"')
-    print("\nThen continue:")
+    print("\nCommit this slice if the user requested or the active build loop requires it:")
+    print("git add <files changed for this slice>")
+    print('git commit -m "<type>: 변경 내용 한글 요약"')
+    print("\nFor an autonomous build loop only:")
     print("tars next")
     return 0
 
 
+def package_config() -> dict[str, object]:
+    package_path = ROOT / "package.json"
+    if not package_path.exists():
+        return {}
+    try:
+        package = json.loads(package_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return package if isinstance(package, dict) else {}
+
+
+def package_scripts() -> dict[str, str]:
+    scripts = package_config().get("scripts", {})
+    return scripts if isinstance(scripts, dict) else {}
+
+
+def package_runner() -> str:
+    if (ROOT / "pnpm-lock.yaml").exists():
+        return "pnpm run"
+    if (ROOT / "yarn.lock").exists():
+        return "yarn run"
+    return "npm run"
+
+
+def project_verification_checks() -> list[tuple[str, str]]:
+    scripts = package_scripts()
+    tars_config = package_config().get("tars", {})
+    configured = tars_config.get("verify") if isinstance(tars_config, dict) else None
+    selected = set(configured) if isinstance(configured, list) and all(isinstance(name, str) for name in configured) else None
+    aliases = [
+        ("typecheck", ["typecheck", "type-check"]),
+        ("lint", ["lint"]),
+        ("test", ["test"]),
+        ("format:check", ["format:check"]),
+    ]
+    checks: list[tuple[str, str]] = []
+    runner = package_runner()
+    for label, candidates in aliases:
+        script = next((candidate for candidate in candidates if candidate in scripts and (selected is None or candidate in selected)), None)
+        if script:
+            checks.append((label, f"{runner} {script}"))
+    return checks
+
+
 def command_verify() -> int:
     checks = [
-        ("typecheck", "pnpm typecheck"),
-        ("lint", "pnpm lint"),
-        ("test", "pnpm test"),
-        ("format:check", "pnpm format:check"),
+        (
+            "tars:compile",
+            f"{sys.executable} -c 'from pathlib import Path; compile(Path(\"tars\").read_text(encoding=\"utf-8\"), \"tars\", \"exec\")'",
+        ),
+        ("tars:behavior", f"{sys.executable} scripts/test-tars.py"),
+        ("tars:acceptance", f"{sys.executable} tars acceptance"),
+        *project_verification_checks(),
     ]
 
     print("TARS verify")
@@ -815,7 +869,7 @@ def command_verify() -> int:
     for label, command in checks:
         print(f"\n[{label}] {command}")
         result = subprocess.run(
-            ["zsh", "-lc", f"source ~/.zshrc >/dev/null 2>&1; {command}"],
+            ["zsh", "-lc", command],
             cwd=ROOT,
             text=True,
             stdout=subprocess.PIPE,

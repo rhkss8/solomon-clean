@@ -244,20 +244,32 @@ const adjustment = usePlanAdjustment();
 const analytics = useAnalytics();
 ```
 
-### 12. TSDoc and Flow Comments
+### 12. Existing Code Reuse And Impact
+
+Before creating a component, hook, utility, modal, drawer, toast, data helper, or interaction primitive, search the common layer and the same feature area for an equivalent.
+
+- Reuse the common primitive when the interaction class matches.
+- Preserve its behavioral contract: focus, scroll lock, z-index, swipe/close behavior, safe area, loading, and accessibility.
+- Create a local implementation only when the shared primitive cannot support the requirement without becoming less coherent.
+- When changing a shared primitive, policy helper, schema, or store, search all direct consumers and verify the affected states. A local fix is incomplete if another consumer now behaves differently.
+
+Review questions:
+
+- Did I search before creating this?
+- Which consumers can observe this change?
+- Did I verify close/reopen, loading/error, responsive, and persisted/reread behavior where applicable?
+
+### 13. TSDoc and Flow Comments
 
 Code should explain the product flow well enough that a future developer can understand why the function exists before reading every line.
 
-Use TSDoc for exported functions, exported types, hooks, domain helpers, AI contract helpers, persistence helpers, analytics helpers, and non-trivial UI components.
+Use TSDoc where ownership, product policy, boundary assumptions, or fallback behavior is not obvious from the name and type.
 
 Required:
 
-- Every exported function, hook, class, type, and component should have a TSDoc block.
 - Every domain or policy function should explain the product rule it protects.
-- Every hook should explain what state it owns, what side effects it performs, and what it intentionally does not own.
 - Every AI or API boundary should document input assumptions, output guarantees, and fallback behavior.
-- Every persistence helper should document storage key ownership and serialization expectations.
-- Every component that coordinates a flow should document the user journey it represents.
+- Non-obvious hooks and persistence helpers should document ownership and side effects.
 
 Avoid:
 
@@ -304,7 +316,7 @@ if (response.type === "plan_revision_suggestion") {
 
 Review questions:
 
-- Can a new contributor understand the flow from exported TSDoc alone?
+- Can a new contributor find the policy or boundary without reading unrelated files?
 - Does the comment explain intent, ownership, or product rule?
 - Would the comment still be true after a likely product change?
 - Is a complex branch missing a short flow comment?
@@ -334,89 +346,6 @@ packages/
   db/
 ```
 
-Adapt the feature names to the actual product domain. Do not copy example domains such as `plan`, `today`, or `adjustment` into unrelated services.
-
-## Naming Rules
-
-Names must describe product intent and responsibility, not implementation mechanics.
-
-Avoid:
-
-- `checkSomething`
-- `doAction`
-- `saveChain`
-- `handleData`
-- `processItem`
-
-Prefer:
-
-- `validateBeforeEstimateSubmission`
-- `canSubmitEstimateRequest`
-- `shouldShowWastePriceModifier`
-- `handleEstimateRequestSubmit`
-
-Boolean names and predicates should use:
-
-- `is`: current state.
-- `has`: possession or existence.
-- `can`: capability or permission.
-- `should`: decision or intended execution.
-
-Do not encode raw technical values repeatedly at call sites. Translate them into domain language once and reuse the named rule.
-
-## Public Website Standards
-
-For public company, marketing, local-service, or content websites, the following are release requirements rather than optional polish.
-
-### Responsive Behavior
-
-- Support mobile and desktop from the same content and domain model.
-- Define breakpoint behavior for navigation, grids, comparison tables, forms, calculators, galleries, and sticky contact actions.
-- Avoid device-specific duplicated pages or duplicated business rules.
-- Keep tap targets, form controls, and fixed actions usable on narrow screens.
-- Test representative mobile, tablet, laptop, and wide desktop viewports.
-
-### SEO
-
-- Define unique title, description, canonical URL, Open Graph metadata, and indexability for every public route template.
-- Centralize metadata generation by page type.
-- Do not duplicate thin location pages with only the place name changed.
-- Use semantic heading order and meaningful link labels.
-- Include crawlable internal links between service, price, portfolio, review, FAQ, and location pages.
-- Generate `robots.txt` and XML sitemap from the same route/content source of truth.
-- Exclude private, preview, parameter-only, and non-canonical routes from the sitemap.
-
-### Structured Data
-
-- Generate JSON-LD from typed domain data rather than handwritten page fragments.
-- Use only schema types supported by real page content, such as `LocalBusiness`, `Organization`, `Service`, `FAQPage`, `BreadcrumbList`, and `Article`.
-- Do not publish ratings, prices, locations, licenses, or business claims that are not verified.
-- Keep visible page content and structured data consistent.
-- Test structured data output and prevent duplicate entities across nested layouts.
-
-### Content Architecture
-
-- Keep service, price, location, FAQ, portfolio, review, contact, and business identity data in explicit domain models.
-- Page templates consume domain data; they do not own business facts.
-- A change to a phone number, operating area, price rule, CTA destination, or company claim should have one obvious edit location.
-- RSS/API normalization belongs at the integration boundary, not inside UI components.
-
-## Final Review Checklist
-
-Before accepting frontend work, verify:
-
-1. Does this value really need state?
-2. Can this condition be expressed in domain language?
-3. Is business logic absent from JSX?
-4. Are repeated conditions and calculations centralized?
-5. Does each function, hook, and component have one responsibility?
-6. Are business rules encapsulated in one obvious location?
-7. Is data flow and state ownership predictable?
-8. Can large behavior be composed from smaller independently testable units?
-9. Do names explain intent without reading implementation?
-10. Would a likely product change require the minimum number of edits?
-11. For public websites, are responsive behavior, SEO metadata, sitemap generation, structured data, and internal linking covered?
-
 ## Review Checklist
 
 Before a change is accepted:
@@ -427,7 +356,8 @@ Before a change is accepted:
 - Is derived state avoided?
 - Are hooks focused?
 - Are components small enough to change safely?
-- Do exported functions, hooks, components, and domain types have useful TSDoc?
+- Do non-obvious domain and boundary APIs have useful TSDoc?
+- Were existing primitives searched and affected consumers checked?
 - Do complex branches include short flow comments where they clarify intent?
 - Are analytics events emitted near user actions, not scattered randomly?
 - Can a future product change be made in one obvious place?

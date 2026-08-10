@@ -6,6 +6,8 @@ This project needs persistent operating rules so Codex can keep building without
 
 Use project docs as local skills. Do not require global Codex skill installation.
 
+`docs/work-routing.md` is the source of truth for request classification, team size, delegation, collaboration, and integration. The sections below are a capability catalog, not a list that must run for every task.
+
 ## Recommended Local Skill Areas
 
 ### 1. Product
@@ -37,6 +39,7 @@ Responsibilities:
 - Own UX strategy, interaction design, visual system, service design, and design QA.
 - Run the design production pipeline before major UI implementation.
 - Produce reference scans, visual territories, direction decisions, wireframe plans, and high-fidelity screen plans.
+- Define a composition model that makes current state, primary object, and primary action visible before styling.
 - Maintain the product tone and design philosophy.
 - Make the signature interaction easy to find and understand.
 - Define review, confirmation, recovery, and empty states.
@@ -46,6 +49,8 @@ Responsibilities:
 Primary references:
 
 - `docs/design-production-pipeline.md`
+- `docs/ui-quality-philosophy.md`
+- `docs/visual-composition-rules.md`
 - `docs/design-reference-brief.md`
 - `docs/design-philosophy.md`
 - `docs/interaction-principles.md`
@@ -55,6 +60,15 @@ Primary references:
 - `docs/design-review-rubric.md`
 - `docs/design-qa-checklist.md`
 - `docs/wiki/index.md` only when research, UX, copy, positioning, or design evidence matters
+
+Optional implementation aid:
+
+- `.codex/skills/impeccable/SKILL.md`
+- Use Impeccable for scoped critique, audit, responsive hardening, polish, and design-system drift detection.
+- Product decisions and approved references always outrank Impeccable's general taste rules.
+- `docs/design-production-pipeline.md`, the chosen direction in `docs/decision-log.md`, and `docs/design-system-spec.md` remain the visual source of truth.
+- Do not enable Impeccable hooks, Live Mode, or CI blocking by default. Adopt them only after a project-specific detector pilot and explicit approval.
+- Generate `PRODUCT.md` or `DESIGN.md` only inside a concrete service after its product direction and implemented visual system exist; never prefill them in this generic starter.
 
 ### 3. Frontend
 
@@ -140,11 +154,15 @@ Primary references:
 
 ## Agent Operating Model
 
-Use one lead agent and focused subagents only when the work can be split safely.
+Use `.codex/skills/tars-orchestrator/SKILL.md` for mixed-domain, high-impact, or safely parallelizable work. Use one lead and the smallest useful team.
 
 ### Lead Agent
 
-Owns product coherence, final integration, and stopping criteria.
+Owns the domain decision and bounded work packages. Exactly one lead is accountable for a task.
+
+### Orchestrator
+
+Owns routing, source-of-truth resolution, worker boundaries, integration, final verification, and user communication. It retains the critical path and never delegates final accountability.
 
 ### Product Agent
 
@@ -189,4 +207,15 @@ Use for prompt contracts, JSON schemas, and AI regression fixtures.
 
 ### QA Agent
 
-Use for testing core flows, finding regressions, and checking analytics coverage.
+Use as a read-only reviewer by default for core flows, regressions, analytics coverage, and release evidence.
+
+## Collaboration Rules
+
+- Keep clear, local work single-agent.
+- Delegate only independent packages with disjoint file ownership.
+- Give every worker the task brief defined in `docs/work-routing.md`.
+- Require evidence, checks, assumptions, and unresolved risks in every handoff.
+- Do not let workers coordinate a peer network or redefine the user request.
+- Use reviewers to test a named risk, not to repeat implementation.
+- Let the orchestrator resolve conflicts and verify the integrated result.
+- Persist durable decisions and reusable lessons only; do not create per-task coordination documents.

@@ -10,7 +10,6 @@ Do not treat the design system as a large component library on day one. For MVP,
 
 Before defining UI tokens, read:
 
-- `docs/project-start-checklist.md`
 - `docs/design-philosophy.md`
 - `docs/design-tone-and-manner.md`
 - `docs/interaction-principles.md`
@@ -19,8 +18,6 @@ Before defining UI tokens, read:
 - `docs/service-definition.md`
 - `docs/g-stack.md`
 - `docs/superpowers.md`
-
-Do not select final brand colors, typography, logo treatment, imagery, or icon language until the Visual Direction Gate in `docs/project-start-checklist.md` is ready.
 
 ## Visual Personality
 
@@ -47,7 +44,7 @@ Before choosing token values, define what the screen must make visible without r
 - Primary action.
 - Review, progress, risk, or completion state.
 
-If the screen needs paragraphs to make these clear, fix the layout and object model before tuning colors, type, or radius.
+If an operational screen needs paragraphs to make these clear, fix the layout and object model before tuning colors, type, or radius. Reading, legal, detail, and content surfaces may legitimately use prose as the primary object.
 
 ### Color
 
@@ -165,7 +162,7 @@ Every important UI component should define:
 - Do not use generic chatbot layout if chat is only one input method.
 - Do not use a dashboard when the product's core promise is a guided flow.
 - Keep primary action visible without drowning the user in actions.
-- Avoid title, paragraph, card-stack screens unless the product object genuinely requires that format.
+- Avoid title, paragraph, card-stack defaults on operational surfaces unless the product object genuinely requires that format.
 - Avoid repeated same-weight text blocks; convert them into structured objects, status rows, or direct manipulation controls.
 
 ## Design System Done Criteria

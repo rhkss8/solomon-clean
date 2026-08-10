@@ -8,31 +8,28 @@ Build the MVP until the core loop is complete:
 
 Use `docs/new-service-starter-protocol.md` as the reusable kickoff protocol.
 
-## Start Every Work Cycle
+## Route Every Work Cycle
 
-1. Read `docs/agent-runbook.md`.
-2. For a new project or an incomplete kickoff, read `docs/project-start-checklist.md` and run its readiness audit before planning or implementation.
-3. Read `docs/lessons-quick.md`.
-4. Read `docs/mvp-todo.md`.
-4. Read `docs/mvp-execution-harness.md`.
-5. Read `docs/decision-log.md`.
-6. Read `docs/lessons-and-rules.md`.
-7. Read `docs/decision-gates.md`.
-8. If doing maintenance, bug fixes, corrections, or refactors, read `.codex/skills/tars-maintenance/SKILL.md` and `docs/maintenance-workflow.md`.
-9. If doing product planning, system design, UX direction, large implementation, or ambiguous todo work, read `.codex/skills/tars-deep-thinking/SKILL.md` and `docs/deep-thinking-workflow.md`.
-10. If resuming after a context reset, break, or another PC, read `docs/reentry-protocol.md` and `docs/workstation-handoff.md`.
-11. If changing kickoff structure, read `docs/new-service-starter-protocol.md` and `docs/new-service-copy-pack.md`.
-12. If changing product definition, read `docs/service-definition.md`, `docs/g-stack.md`, and `docs/superpowers.md`.
-13. If product intent, research, UX, copy, positioning, or design evidence is unclear, read `docs/wiki/schema.md` and `docs/wiki/index.md`.
-14. If touching UI, UX, visual design, or copy, first confirm the Visual Direction Gate in `docs/project-start-checklist.md`, then read `docs/design-production-pipeline.md`, `docs/design-reference-brief.md`, `docs/design-philosophy.md`, `docs/interaction-principles.md`, `docs/design-system-spec.md`, `docs/service-design-blueprint.md`, `docs/design-tone-and-manner.md`, `docs/design-review-rubric.md`, and `docs/design-qa-checklist.md`.
-15. If touching frontend code, read `docs/frontend-engineering-standards.md`.
-16. If touching AI behavior, read `docs/ai-contracts.md`.
-17. If touching metrics, read `docs/analytics-events.md`.
-18. If testing or preparing release, read `docs/qa-checklist.md` and `docs/design-qa-checklist.md`.
+1. An explicit user request and the latest correction outrank autonomous todo selection.
+2. Read `docs/work-routing.md` and classify the action, domain, impact, uncertainty, and source of truth.
+3. Choose one primary work profile and exactly one lead.
+4. Load only the references selected by the routing table. Do not preload the full harness.
+5. Keep narrow work single-agent. Use workers or reviewers only when the work splits safely or the risk justifies an independent check.
+6. If there is no direct user request, use `docs/mvp-todo.md` to select the next core-loop slice.
+
+Route optional capabilities only when selected:
+
+- Maintenance: `.codex/skills/tars-maintenance/SKILL.md` and `docs/maintenance-workflow.md`.
+- Cross-domain orchestration: `.codex/skills/tars-orchestrator/SKILL.md`.
+- Ambiguous product, UX, or architecture work: `.codex/skills/tars-deep-thinking/SKILL.md` and `docs/deep-thinking-workflow.md`.
+- Re-entry: `docs/reentry-protocol.md` and `docs/workstation-handoff.md`.
+- Product definition: `docs/service-definition.md`, `docs/g-stack.md`, and `docs/superpowers.md`.
+- UI/UX: the approved design source plus only the relevant design reference and QA checklist.
+- Frontend, AI, metrics, or release: the corresponding engineering, AI, analytics, or QA contract.
 
 ## Work Selection
 
-Pick the first incomplete todo that unlocks the core loop.
+Handle the explicit user request first. Pick the first incomplete todo that unlocks the core loop only when operating an autonomous build session without a direct request.
 
 Priority order:
 
@@ -111,10 +108,8 @@ When resuming after a context reset, machine switch, or long break:
 
 Design rule:
 
-- Do not begin a new project by proposing a stack, palette, logo, sitemap, or implementation plan before running `docs/project-start-checklist.md`.
-- Prefill the checklist from conversation and project context. Ask only unanswered blocking questions.
 - Do not jump from abstract design philosophy directly into code.
-- Before major UI work, produce a reference scan, 2 to 3 visual territories, a direction decision, a wireframe plan, and a high-fidelity screen plan.
+- Before major UI work, produce a reference scan, 2 to 3 visual territories, a direction decision, a composition model, a wireframe plan, and a high-fidelity screen plan.
 - Define design philosophy, interaction principles, and the MVP design system before building repeated UI.
 - Keep the design system small enough to serve the first vertical slice.
 - Run design review and design QA before marking a UI slice complete.
@@ -123,9 +118,9 @@ Design rule:
 
 Frontend code must follow `docs/frontend-engineering-standards.md`.
 
-Any code that mixes UI, policy, API, navigation, and analytics in one component should be refactored before moving on.
+Refactor mixed responsibilities only when they obstruct the requested change, create a concrete regression risk, or are part of the accepted scope. Do not turn a local task into a standards cleanup.
 
-Every exported function, hook, domain helper, AI/API boundary, persistence helper, and flow-coordinating component should include useful TSDoc. Comments should explain ownership, intent, product rule, or flow guarantees, not repeat syntax.
+Document non-obvious product rules and cross-layer contracts. Do not require comments or TSDoc for self-explanatory exports.
 
 ## Stop Conditions
 
@@ -151,22 +146,23 @@ At the end of each cycle, report:
 
 ## End Every Work Cycle
 
-Before moving to the next todo:
+Before moving to another autonomous-build todo:
 
-1. Run `tars verify`.
-2. Run `tars done`.
-3. Commit the completed slice.
-4. Then run `tars next`.
+1. Run `tars done`; it performs the routed verification once.
+2. Commit the completed slice when the active build loop requires it.
+3. Then run `tars next`.
 
-The git pre-commit hook should run the same checks. Do not bypass it unless the user explicitly asks.
+For a user-directed maintenance request, stop after the requested outcome, relevant verification, and integrated report. Do not automatically start another todo.
+
+If the project uses a pre-commit hook, keep it fast and complementary. Do not run the same slow suite in edit hooks, `tars done`, and pre-commit without additional signal.
 
 ## Lesson-And-Run Loop
 
-At the end of each meaningful discussion, implementation slice, QA pass, or user feedback review:
+When a durable product decision or reusable lesson emerges:
 
 1. If a decision was made, update `docs/decision-log.md`.
 2. If a reusable lesson emerged, update `docs/lessons-and-rules.md`.
 3. If the lesson affects execution, update the relevant harness doc.
 4. If the same rule appears in multiple projects or survives one vertical slice, mark it as a reusable starter candidate.
 
-Do not let important project knowledge live only in chat.
+Do not write routine task coordination, transient debugging notes, or already-captured rules into durable project memory.

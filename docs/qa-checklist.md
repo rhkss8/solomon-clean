@@ -64,21 +64,6 @@ If AI is used:
 - Domain functions are named with product language.
 - Components remain small enough to review.
 
-## Public Website QA
-
-- Header, navigation, CTA, forms, calculators, tables, galleries, and footer work on mobile and desktop.
-- Every public route template has a unique title, description, canonical URL, and social metadata.
-- `robots.txt` is valid.
-- XML sitemap contains canonical public routes and excludes private/non-canonical routes.
-- Sitemap route count matches the expected content source.
-- Structured data is derived from verified visible content.
-- `LocalBusiness`/`Organization`, `Service`, `BreadcrumbList`, `FAQPage`, and `Article` schemas are used only where applicable.
-- Structured data has no placeholder claims, duplicate primary entities, or mismatched visible content.
-- Semantic heading order and landmark structure are valid.
-- Internal links connect service, price, portfolio, review, FAQ, and location content.
-- Thin or duplicate location pages are not published.
-- Core Web Vitals and image loading are checked on representative mobile and desktop pages.
-
 ## Release Gate
 
 Before closed MVP distribution:
@@ -90,4 +75,3 @@ Before closed MVP distribution:
 - One fresh install path passes.
 - Environment variables are documented.
 - Error logging is enabled.
-- For a public website, responsive, SEO, sitemap, structured-data, and internal-link QA passes.
