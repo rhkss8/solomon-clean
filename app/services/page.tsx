@@ -8,5 +8,5 @@ export const metadata = createPageMetadata({
 });
 
 export default function ServicesPage() {
-  return <main><section className="page-hero"><div className="container"><span className="eyebrow">SERVICES</span><h1>필요한 청소를<br />한 곳에서 찾으세요.</h1><p>공간과 현장 상태에 맞는 서비스를 선택하면 작업 범위와 비용 기준을 확인할 수 있습니다.</p></div></section><section className="section"><div className="container"><ServiceGrid /></div></section></main>;
+  return <main><section className="page-hero"><div className="container"><span className="eyebrow">SERVICES</span><h1>필요한 청소를<br />한 곳에서 찾으세요.</h1><p>서비스를 선택하면 해당 카테고리에 맞는 무료견적 질문이 바로 시작됩니다.</p></div></section><section className="section"><div className="container"><ServiceGrid /></div></section></main>;
 }

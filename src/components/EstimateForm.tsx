@@ -3,27 +3,82 @@
 import { upload } from "@vercel/blob/client";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
+import { getEstimateQuestions, type EstimateQuestion } from "@/src/config/estimate/questions";
 import type { EstimateField } from "@/src/domain/estimate";
+import { formatPhoneNumber, isServiceSlug, services, siteConfig, type ServiceSlug } from "@/src/domain/site";
 import { validateEstimatePhotos, type UploadedPhoto } from "@/src/server/photo-storage";
-import { services } from "@/src/domain/site";
 
 type SubmissionState = "idle" | "submitting" | "success" | "error";
 type SubmitResponse = { success?: boolean; reference?: string; message?: string; fieldErrors?: Partial<Record<EstimateField, string>> };
+type Answers = Record<string, string | string[]>;
+
 const extensions = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" } as const;
 
-/** Uploads photos directly to private Vercel Blob storage, then submits only metadata to the API. */
-export function EstimateForm() {
+function answerLabel(value: string | string[] | undefined) { return Array.isArray(value) ? value.join(", ") : value ?? ""; }
+
+export function EstimateForm({ initialService }: { initialService?: ServiceSlug }) {
   const searchParams = useSearchParams();
+  const queryService = searchParams.get("service") ?? "";
+  const presetService = initialService ?? (isServiceSlug(queryService) ? queryService : "");
+  const [service, setService] = useState<ServiceSlug | "">(presetService);
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState<Answers>({});
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [privacy, setPrivacy] = useState(false);
   const [state, setState] = useState<SubmissionState>("idle");
-  const [errors, setErrors] = useState<Partial<Record<EstimateField, string>>>({});
   const [message, setMessage] = useState("");
   const [reference, setReference] = useState("");
+  const advanceTimer = useRef<number | null>(null);
+
+  const selectedService = services.find((item) => item.slug === service);
+  const questions = service ? getEstimateQuestions(service) : [];
+  const currentQuestion = questions[step];
+  const isContactStep = Boolean(service) && step === questions.length;
+  const currentAnswer = currentQuestion ? answers[currentQuestion.id] : undefined;
+
+  useEffect(() => () => { if (advanceTimer.current) window.clearTimeout(advanceTimer.current); }, []);
+
+  function clearAdvanceTimer() {
+    if (advanceTimer.current) window.clearTimeout(advanceTimer.current);
+    advanceTimer.current = null;
+  }
+  function scheduleAdvance(delay: number) {
+    clearAdvanceTimer();
+    const currentStep = step;
+    advanceTimer.current = window.setTimeout(() => setStep((value) => value === currentStep ? value + 1 : value), delay);
+  }
+  function chooseService(slug: ServiceSlug) { clearAdvanceTimer(); setService(slug); setStep(0); setAnswers({}); setMessage(""); }
+  function selectOption(question: EstimateQuestion, option: string) {
+    setMessage("");
+    const selected = Array.isArray(currentAnswer) ? currentAnswer : [];
+    const nextAnswer = question.type === "multiple" ? (selected.includes(option) ? selected.filter((item) => item !== option) : [...selected, option]) : option;
+    setAnswers((current) => ({ ...current, [question.id]: nextAnswer }));
+    if (question.type === "single") scheduleAdvance(180);
+    else if (nextAnswer.length > 0) scheduleAdvance(900);
+    else clearAdvanceTimer();
+  }
+  function submitTextAnswer() {
+    if (!currentQuestion || answerLabel(currentAnswer).trim().length === 0) return;
+    clearAdvanceTimer(); setStep((current) => current + 1);
+  }
+  function handleTextKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key !== "Enter" || event.shiftKey) return;
+    event.preventDefault(); submitTextAnswer();
+  }
+  function editAnswer(index: number) { clearAdvanceTimer(); setMessage(""); setStep(index); }
+  function resetFlow() {
+    const hasProgress = step > 0 || Object.keys(answers).length > 0 || Boolean(name || phone || photos.length);
+    if (hasProgress && !window.confirm("입력한 내용을 모두 지우고 처음부터 다시 시작할까요?")) return;
+    clearAdvanceTimer(); setService(presetService); setStep(0); setAnswers({}); setPhotos([]); setName(""); setPhone(""); setPrivacy(false); setState("idle"); setMessage(""); setReference("");
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); setState("submitting"); setErrors({}); setMessage("");
-    const formData = new FormData(event.currentTarget);
-    const photos = formData.getAll("photos").filter((value): value is File => value instanceof File && value.size > 0);
+    event.preventDefault();
+    if (name.trim().length < 2 || !/^0\d{9,10}$/.test(phone.replace(/\D/g, "")) || !privacy) { setMessage("성함, 연락처와 개인정보 동의를 확인해주세요."); return; }
+    setState("submitting"); setMessage("");
     const photoValidation = validateEstimatePhotos(photos);
     if (!photoValidation.success) { setMessage(photoValidation.message); setState("error"); return; }
     try {
@@ -34,14 +89,39 @@ export function EstimateForm() {
         const blob = await upload(pathname, file, { access: "private", handleUploadUrl: "/api/estimates/upload", contentType });
         return { pathname: blob.pathname, contentType, size: file.size };
       }));
-      const response = await fetch("/api/estimates", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ service: formData.get("service"), name: formData.get("name"), phone: formData.get("phone"), area: formData.get("area"), description: formData.get("description"), preferredDate: formData.get("preferredDate"), privacy: formData.get("privacy") === "on", photos: uploadedPhotos }) });
+      const area = answerLabel(answers.area);
+      const preferredDateText = answerLabel(answers.preferredDate);
+      const preferredDate = /^\d{4}-\d{2}-\d{2}$/.test(preferredDateText) ? preferredDateText : "";
+      const description = questions.filter((question) => question.id !== "area").map((question) => `${question.prompt}: ${answerLabel(answers[question.id])}`).join("\n");
+      const response = await fetch("/api/estimates", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ service, name, phone, area, description, preferredDate, privacy, photos: uploadedPhotos }) });
       const result = await response.json() as SubmitResponse;
-      if (!response.ok) { setErrors(result.fieldErrors ?? {}); setMessage(result.message ?? "입력 내용을 확인해주세요."); setState("error"); return; }
+      if (!response.ok) { setMessage(result.message ?? "입력 내용을 확인해주세요."); setState("error"); return; }
       setReference(result.reference ?? ""); setState("success");
     } catch { setMessage("서버와 통신하지 못했습니다. 잠시 후 다시 시도해주세요."); setState("error"); }
   }
 
-  if (state === "success") return <main><section className="page-hero"><div className="container narrow success-panel"><span className="success-mark">✓</span><h1>견적 요청이 접수됐습니다.</h1><p>접수번호 <strong>{reference}</strong><br />담당자가 현장 정보와 사진을 확인한 뒤 연락드립니다.</p><button className="button button--secondary" onClick={() => setState("idle")} type="button">추가 견적 작성</button></div></section></main>;
-  const error = (field: EstimateField) => errors[field] && <small className="field-error">{errors[field]}</small>;
-  return <main><section className="page-hero"><div className="container narrow"><span className="eyebrow">FREE ESTIMATE</span><h1>현장 정보를 알려주세요.</h1><p>필수 정보만 먼저 받고, 세부 내용은 상담 과정에서 확인합니다.</p></div></section><section className="section"><div className="container narrow"><form className="estimate-form" onSubmit={handleSubmit} noValidate><label>필요한 서비스<select defaultValue={searchParams.get("service") ?? ""} name="service"><option disabled value="">서비스 선택</option>{services.map((service) => <option key={service.slug} value={service.slug}>{service.name}</option>)}</select>{error("service")}</label><div className="form-grid"><label>성함<input name="name" placeholder="성함" />{error("name")}</label><label>연락처<input inputMode="tel" name="phone" placeholder="010-0000-0000" />{error("phone")}</label></div><label>서비스 지역<input name="area" placeholder="예: 서울 마포구" />{error("area")}</label><label>현장 설명<textarea name="description" placeholder="공간, 평수, 오염 상태, 폐기물량 등 알고 있는 내용을 적어주세요." rows={6} />{error("description")}</label><label>희망일<input name="preferredDate" type="date" />{error("preferredDate")}</label><label className="file-field">현장 사진<input accept="image/jpeg,image/png,image/webp" multiple name="photos" type="file" /><small>JPG, PNG, WebP · 최대 8장, 장당 10MB</small></label><label className="check-field"><input name="privacy" type="checkbox" /><span><Link className="text-link" href="/privacy" target="_blank">개인정보 수집 및 이용 안내</Link>를 확인했으며 상담 연락에 동의합니다.</span></label>{error("privacy")}<div aria-live="polite">{state === "error" && message && <p className="form-error">{message}</p>}</div><button className="button button--primary button--large" disabled={state === "submitting"} type="submit">{state === "submitting" ? "접수 중…" : "견적 요청 접수"}</button></form></div></section></main>;
+  if (state === "success") return <main className="quote-chat-page"><section className="quote-chat"><div className="quote-chat__success"><span>✓</span><h1>무료견적 요청이 접수됐습니다.</h1><p>접수번호 <strong>{reference}</strong><br />담당자가 내용을 확인한 뒤 연락드리겠습니다.</p><Link href="/">홈으로 돌아가기</Link></div></section></main>;
+
+  return <main className="quote-chat-page"><section className="quote-chat">
+    <header className="quote-chat__header"><div><span>1분 무료견적</span><div><strong>{selectedService?.name ?? "서비스 선택"}</strong><button onClick={resetFlow} type="button">처음부터</button></div></div><div className="quote-chat__progress"><i style={{ width: service ? `${Math.max(8, ((step + 1) / (questions.length + 1)) * 100)}%` : "4%" }} /></div></header>
+    <div className="quote-chat__body">
+      <div className="quote-bubble quote-bubble--guide"><strong>몇 가지 정보만 알려주시면 무료견적을 받을 수 있어요.</strong><span>전화 상담은 <a href={`tel:${siteConfig.phone}`}>{formatPhoneNumber(siteConfig.phone)}</a>로 연락 주세요.</span></div>
+
+      {!service ? <div className="quote-question"><h1>원하시는 서비스를 선택해주세요.</h1><div className="quote-service-options">{services.map((item) => <button key={item.slug} onClick={() => chooseService(item.slug)} type="button"><span>{item.name}</span><small>{item.shortDescription}</small></button>)}</div></div> : <>
+        {questions.slice(0, step).map((question, index) => <div className="quote-history" key={question.id}><div className="quote-bubble quote-bubble--question">{question.prompt}</div><button className="quote-bubble quote-bubble--answer" onClick={() => editAnswer(index)} type="button"><span>{answerLabel(answers[question.id])}</span><small>수정</small></button></div>)}
+        {currentQuestion ? <div className="quote-question" key={currentQuestion.id}><h1>{currentQuestion.prompt}</h1>
+          {currentQuestion.type === "text" ? <div className="quote-text-answer"><textarea autoFocus onChange={(event) => setAnswers((current) => ({ ...current, [currentQuestion.id]: event.target.value }))} onKeyDown={handleTextKeyDown} placeholder={currentQuestion.placeholder} rows={3} value={answerLabel(currentAnswer)} /><button aria-label="답변 전송" disabled={!answerLabel(currentAnswer).trim()} onClick={submitTextAnswer} type="button">↑</button></div> : <><div className="quote-option-list">{currentQuestion.options?.map((option) => { const selected = Array.isArray(currentAnswer) ? currentAnswer.includes(option) : currentAnswer === option; return <button aria-pressed={selected} className={selected ? "is-selected" : ""} key={option} onClick={() => selectOption(currentQuestion, option)} type="button"><i>{selected ? "✓" : ""}</i><span>{option}</span></button>; })}</div><small className="quote-question__hint">{currentQuestion.type === "multiple" ? "복수 선택 가능 · 선택을 마치면 자동으로 넘어갑니다" : "선택하면 바로 다음 질문으로 넘어갑니다"}</small></>}
+        </div> : null}
+
+        {isContactStep ? <form className="quote-question quote-contact" onSubmit={handleSubmit}>
+          <h1>마지막으로 연락받을 정보를 알려주세요.</h1>
+          <label>현장 사진 <input accept="image/jpeg,image/png,image/webp" multiple onChange={(event) => setPhotos(Array.from(event.target.files ?? []))} type="file" /><small>{photos.length ? `${photos.length}장 선택됨` : "선택사항 · JPG, PNG, WebP 최대 8장"}</small></label>
+          <div className="quote-contact__grid"><label>성함<input autoComplete="name" onChange={(event) => setName(event.target.value)} placeholder="성함" value={name} /></label><label>연락처<input autoComplete="tel" inputMode="tel" onChange={(event) => setPhone(event.target.value)} placeholder="010-0000-0000" value={phone} /></label></div>
+          <label className="quote-contact__privacy"><input checked={privacy} onChange={(event) => setPrivacy(event.target.checked)} type="checkbox" /><span><Link href="/privacy" target="_blank">개인정보 수집 및 이용 안내</Link>를 확인했으며 상담 연락에 동의합니다.</span></label>
+          {message ? <p className="form-error" role="alert">{message}</p> : null}
+          <button className="quote-contact__submit" disabled={state === "submitting"} type="submit">{state === "submitting" ? "접수 중…" : "무료견적 요청"}</button>
+        </form> : null}
+      </>}
+    </div>
+  </section></main>;
 }
