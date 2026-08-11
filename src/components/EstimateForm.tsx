@@ -14,16 +14,55 @@ type SubmitResponse = { success?: boolean; reference?: string; message?: string;
 type Answers = Record<string, string | string[]>;
 
 const extensions = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" } as const;
+const wasteCategoryAnswers: Readonly<Record<string, string>> = {
+  industrial: "사업장 폐기물",
+  home: "가구·가전",
+  living: "생활 폐기물",
+  moving: "이사 폐기물",
+};
+const residentialSizes = ["10평 이하", "11~20평", "21~30평", "31~40평", "41평 이상"] as const;
 
 function answerLabel(value: string | string[] | undefined) { return Array.isArray(value) ? value.join(", ") : value ?? ""; }
+function findNextUnansweredStep(questions: readonly EstimateQuestion[], start: number, answers: Answers) {
+  let nextStep = start;
+  while (nextStep < questions.length && answerLabel(answers[questions[nextStep].id]).trim()) nextStep += 1;
+  return nextStep;
+}
 
 export function EstimateForm({ initialService }: { initialService?: ServiceSlug }) {
   const searchParams = useSearchParams();
   const queryService = searchParams.get("service") ?? "";
   const presetService = initialService ?? (isServiceSlug(queryService) ? queryService : "");
+  const presetWasteType = presetService === "waste-disposal" ? wasteCategoryAnswers[searchParams.get("category") ?? ""] : undefined;
+  const querySize = searchParams.get("size") ?? "";
+  const presetResidentialSize = presetService === "residential-cleaning" && residentialSizes.some((size) => size === querySize) ? querySize : undefined;
+  const queryDifficulty = searchParams.get("difficulty") ?? "";
+  const queryExtras = searchParams.get("extras") ?? "";
+  const presetDescription = presetService === "residential-cleaning"
+    ? [`오염 난이도: ${queryDifficulty || "미선택"}`, queryExtras ? `추가 작업: ${queryExtras}` : ""].filter(Boolean).join("\n")
+    : undefined;
+  const presetHoardingCare = presetService === "hoarding-cleanup" ? searchParams.getAll("care").filter(Boolean) : [];
+  const presetHoardingSpace = presetService === "hoarding-cleanup" ? searchParams.get("space") ?? "" : "";
+  const presetHoardingLevel = presetService === "hoarding-cleanup" ? searchParams.get("level") ?? "" : "";
+  const presetDeepContamination = presetService === "deep-cleaning" ? searchParams.get("contamination") ?? "" : "";
+  const presetDeepSpace = presetService === "deep-cleaning" ? searchParams.get("space") ?? "" : "";
+  const presetDeepPeriod = presetService === "deep-cleaning" ? searchParams.get("period") ?? "" : "";
+  const presetAnswers: Answers = {
+    ...(presetWasteType ? { wasteType: [presetWasteType] } : {}),
+    ...(presetResidentialSize ? { size: presetResidentialSize } : {}),
+    ...(presetDescription ? { description: presetDescription } : {}),
+    ...(presetHoardingCare.length ? { care: presetHoardingCare } : {}),
+    ...(presetHoardingSpace ? { space: presetHoardingSpace } : {}),
+    ...(presetHoardingLevel ? { level: presetHoardingLevel } : {}),
+    ...(presetDeepContamination ? { contamination: [presetDeepContamination] } : {}),
+    ...(presetDeepSpace ? { space: presetDeepSpace } : {}),
+    ...(presetDeepPeriod ? { period: presetDeepPeriod } : {}),
+  };
+  const presetQuestions = presetService ? getEstimateQuestions(presetService) : [];
+  const presetStep = findNextUnansweredStep(presetQuestions, 0, presetAnswers);
   const [service, setService] = useState<ServiceSlug | "">(presetService);
-  const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<Answers>({});
+  const [step, setStep] = useState(presetStep);
+  const [answers, setAnswers] = useState<Answers>(presetAnswers);
   const [photos, setPhotos] = useState<File[]>([]);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -45,24 +84,26 @@ export function EstimateForm({ initialService }: { initialService?: ServiceSlug 
     if (advanceTimer.current) window.clearTimeout(advanceTimer.current);
     advanceTimer.current = null;
   }
-  function scheduleAdvance(delay: number) {
+  function scheduleAdvance(delay: number, nextAnswers: Answers) {
     clearAdvanceTimer();
     const currentStep = step;
-    advanceTimer.current = window.setTimeout(() => setStep((value) => value === currentStep ? value + 1 : value), delay);
+    const targetStep = findNextUnansweredStep(questions, currentStep + 1, nextAnswers);
+    advanceTimer.current = window.setTimeout(() => setStep((value) => value === currentStep ? targetStep : value), delay);
   }
   function chooseService(slug: ServiceSlug) { clearAdvanceTimer(); setService(slug); setStep(0); setAnswers({}); setMessage(""); }
   function selectOption(question: EstimateQuestion, option: string) {
     setMessage("");
     const selected = Array.isArray(currentAnswer) ? currentAnswer : [];
     const nextAnswer = question.type === "multiple" ? (selected.includes(option) ? selected.filter((item) => item !== option) : [...selected, option]) : option;
-    setAnswers((current) => ({ ...current, [question.id]: nextAnswer }));
-    if (question.type === "single") scheduleAdvance(180);
-    else if (nextAnswer.length > 0) scheduleAdvance(900);
+    const nextAnswers = { ...answers, [question.id]: nextAnswer };
+    setAnswers(nextAnswers);
+    if (question.type === "single") scheduleAdvance(180, nextAnswers);
+    else if (nextAnswer.length > 0) scheduleAdvance(900, nextAnswers);
     else clearAdvanceTimer();
   }
   function submitTextAnswer() {
     if (!currentQuestion || answerLabel(currentAnswer).trim().length === 0) return;
-    clearAdvanceTimer(); setStep((current) => current + 1);
+    clearAdvanceTimer(); setStep(findNextUnansweredStep(questions, step + 1, answers));
   }
   function handleTextKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
     if (event.key !== "Enter" || event.shiftKey) return;
@@ -72,7 +113,7 @@ export function EstimateForm({ initialService }: { initialService?: ServiceSlug 
   function resetFlow() {
     const hasProgress = step > 0 || Object.keys(answers).length > 0 || Boolean(name || phone || photos.length);
     if (hasProgress && !window.confirm("입력한 내용을 모두 지우고 처음부터 다시 시작할까요?")) return;
-    clearAdvanceTimer(); setService(presetService); setStep(0); setAnswers({}); setPhotos([]); setName(""); setPhone(""); setPrivacy(false); setState("idle"); setMessage(""); setReference("");
+    clearAdvanceTimer(); setService(presetService); setStep(presetStep); setAnswers(presetAnswers); setPhotos([]); setName(""); setPhone(""); setPrivacy(false); setState("idle"); setMessage(""); setReference("");
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {

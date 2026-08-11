@@ -1,24 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
-import { serviceImages } from "@/src/config/service-images";
+import { primaryServiceCategories } from "@/src/config/primary-service-categories";
 import { siteConfig } from "@/src/domain/site";
-
-const quickServices = [
-  { href: "/services/move-in-cleaning", label: "입주·이사·준공청소", image: serviceImages["move-in-cleaning"], imageClassName: "service-quick__art--move-in" },
-  { href: "/services/waste-disposal", label: "폐기물처리", image: serviceImages["waste-disposal"] },
-  { href: "/services/hoarding-cleanup", label: "쓰레기집청소", image: serviceImages["hoarding-cleanup"] },
-  { href: "/services/deep-cleaning", label: "특수청소", image: serviceImages["deep-cleaning"] },
-  { href: "/services/estate-clearing", label: "유품정리", image: serviceImages["estate-clearing"] },
-  { href: "/services/home-organizing", label: "정리수납", image: serviceImages["home-organizing"] },
-] as const;
 
 type ServiceQuickMenuProps = {
   destination?: "service" | "estimate";
 };
 
-function createQuickServiceHref(serviceHref: string, destination: ServiceQuickMenuProps["destination"]) {
-  if (destination === "service") return serviceHref;
-  const serviceSlug = serviceHref.replace("/services/", "");
+function createQuickServiceHref(serviceSlug: string, destination: ServiceQuickMenuProps["destination"]) {
+  if (destination === "service") return `/services/${serviceSlug}`;
   return `/estimate?service=${serviceSlug}`;
 }
 
@@ -27,8 +17,8 @@ export function ServiceQuickMenu({ destination = "service" }: ServiceQuickMenuPr
   return (
     <nav className="service-quick" aria-label="서비스와 빠른 상담">
       <div className="service-quick__track">
-        {quickServices.map((service) => (
-          <Link className="service-quick__item" href={createQuickServiceHref(service.href, destination)} key={service.label}>
+        {primaryServiceCategories.map((service) => (
+          <Link className="service-quick__item" href={createQuickServiceHref(service.slug, destination)} key={service.slug}>
             <span className={`service-quick__art ${"imageClassName" in service ? service.imageClassName : ""}`}>
               <Image alt="" fill priority sizes="(max-width: 600px) 22vw, 150px" src={service.image} unoptimized />
             </span>

@@ -176,7 +176,7 @@ export function getServiceBySlug(slug: string) {
 export const navigation = [
   { href: "/services", label: "서비스" },
   { href: "/prices", label: "비용안내" },
+  { href: "/reviews", label: "고객리뷰" },
   { href: "/portfolio", label: "작업사례" },
-  { href: "/regions", label: "서비스 지역" },
   { href: "/company", label: "회사소개" },
 ] as const;

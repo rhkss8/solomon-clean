@@ -23,6 +23,7 @@ export function SiteHeader() {
         <BrandLogo />
         <nav aria-label="상단 메뉴" className="header-utility">
           <Link href="/prices">비용문의</Link>
+          <Link href="/reviews">고객리뷰</Link>
           <Link href="/portfolio">작업사례</Link>
           <a href={`tel:${siteConfig.phone}`}>전화 {formatPhoneNumber(siteConfig.phone)}</a>
           <a className="header-kakao-link" href={siteConfig.kakaoUrl} rel="noreferrer" target="_blank"><KakaoSymbol />카카오 상담</a>

@@ -1,12 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { BlogPostGrid } from "@/src/components/BlogPostGrid";
+import { CustomerReviewGrid } from "@/src/components/CustomerReviewGrid";
 import { ServiceQuickMenu } from "@/src/components/ServiceQuickMenu";
 import { StructuredData } from "@/src/components/StructuredData";
 import { formatPhoneNumber, services, siteConfig } from "@/src/domain/site";
 import { buildLocalBusinessSchema } from "@/src/domain/structured-data";
 import { createPageMetadata } from "@/src/lib/metadata";
 import { getBlogPosts } from "@/src/server/blog-feed";
+import { getCustomerReviews } from "@/src/server/customer-review-feed";
 
 export const metadata = createPageMetadata({
   title: "전국 청소·폐기물·정리 무료견적",
@@ -32,14 +34,8 @@ const workPairs = [
   ["/blog-images/223238169925.jpg", "/blog-images/223238397121.jpg", "입주·거주 청소"],
 ];
 
-const testimonials = [
-  ["집 전체가 다시 생활할 수 있는 공간이 됐어요.", "오래 미뤄둔 정리라 걱정했는데 필요한 물건을 먼저 구분하고 작업해주셔서 안심했습니다.", "쓰레기집 청소 · 서울"],
-  ["사진 상담부터 설명이 명확했어요.", "어떤 조건에서 비용이 달라지는지 미리 알려주셔서 현장에서도 당황하지 않았습니다.", "폐기물 처리 · 경기"],
-  ["청소와 정리를 한 번에 해결했어요.", "여러 업체에 같은 이야기를 반복하지 않아도 돼서 일정과 소통이 훨씬 편했습니다.", "이사청소 · 인천"],
-];
-
 export default async function HomePage() {
-  const { posts } = await getBlogPosts(6);
+  const [{ posts }, reviewResult] = await Promise.all([getBlogPosts(6), getCustomerReviews({ limit: 3 })]);
   return (
     <main className="home-v2">
       <StructuredData data={buildLocalBusinessSchema()} />
@@ -128,8 +124,8 @@ export default async function HomePage() {
 
       <section className="review-section section">
         <div className="container">
-          <div className="review-summary"><div><strong>고객의 말로<br />확인하는 서비스</strong><p>상담부터 작업 완료까지 실제로 경험한 고객의 이야기를 모았습니다.</p></div><div><b>3가지</b><span>핵심 만족 기준</span></div><div><b>전국</b><span>상담 가능</span></div></div>
-          <div className="review-cards">{testimonials.map(([title, copy, meta]) => <article key={title}><div>★★★★★</div><h3>{title}</h3><p>{copy}</p><small>{meta}</small></article>)}</div>
+          <div className="review-summary"><div><strong>고객의 말로<br />확인하는 서비스</strong><p>현재는 API 연결 전 예시 리뷰를 표시합니다. 실제 리뷰가 준비되면 같은 영역에 자동으로 반영됩니다.</p><Link className="review-summary__link" href="/reviews">고객 리뷰 전체 보기 →</Link></div><div><b>{reviewResult.total}개</b><span>준비된 예시 리뷰</span></div><div><b>전국</b><span>상담 가능</span></div></div>
+          <CustomerReviewGrid compact reviews={reviewResult.reviews} />
         </div>
       </section>
 
