@@ -1,0 +1,17 @@
+import Image from "next/image";
+import Link from "next/link";
+import { EstateClearingPriceCalculator } from "@/src/components/EstateClearingPriceCalculator";
+import { createPageMetadata } from "@/src/lib/metadata";
+
+export const metadata = createPageMetadata({ title:"유품정리 비용안내", description:"유품정리 최소·평균·최대 비용과 물품 분류, 폐기물 반출, 사다리차와 퇴실청소 기준을 확인하세요.", path:"/prices-left" });
+const factors = [["분류·확인","보관 기준 협의","서류·사진·귀중품은 확인 없이 버리지 않습니다."],["폐기물 반출","1톤 1차당 40만원~","실제 물품의 부피와 재질로 산정합니다."],["사다리차","1시간당 12만원~","고층이거나 계단 반출이 어려울 때 적용합니다."],["퇴실 청소","범위별 별도 산정","물품 반출 후 필요한 공간만 확인합니다."]] as const;
+const faq = [["현장에 계속 있어야 하나요?","보관 기준과 확인 방식을 먼저 정하면 사진과 전화로 중간 확인하며 비대면 진행할 수 있습니다."],["귀중품이 발견되면 어떻게 하나요?","서류·현금·귀금속·사진처럼 판단이 필요한 물품은 별도 보관하고 담당자 확인 전 처리하지 않습니다."],["모든 물건을 버려야 하나요?","아닙니다. 보관·전달·기증·폐기 기준을 먼저 나누고 판단이 어려운 물품은 임의로 처리하지 않습니다."]] as const;
+
+export default function EstateClearingPricePage(){return <main className="estate-price-page">
+  <section className="estate-price-hero"><div className="container"><div className="estate-price-hero__copy"><h1>버리기 전에,<br/>남겨야 할 것을<br/>먼저 찾습니다.</h1><p>유품정리는 물건을 비우는 일이 아니라 보관 기준을 지키는 일입니다. 분류·인계·반출·청소 범위를 나누어 확인하세요.</p><div><Link className="button button--primary" href="/estimate?service=estate-clearing">비공개 사진견적</Link><a className="button button--secondary" href="#estate-calculator">예상비용 계산</a></div></div><figure><div className="estate-price-hero__scene"><Image alt="전문 작업자가 사진과 서류, 의류를 보관 기준에 따라 조심스럽게 분류하는 유품정리 현장" fill priority sizes="(max-width:900px) 100vw,52vw" src="/generated/estate-clearing-hero-v1.png"/></div><figcaption><span>보관</span><span>인계</span><span>기증</span><span>반출</span></figcaption></figure><div className="estate-price-hero__numbers"><div><strong>35만원</strong><span>최소</span></div><div><strong>80만원</strong><span>평균</span></div><div><strong>300만원</strong><span>최대</span></div></div></div></section>
+  <section className="estate-calculator-wrap" id="estate-calculator"><div className="container"><EstateClearingPriceCalculator/></div></section>
+  <section className="estate-price-factors"><div className="container"><div className="estate-price-factors__heading"><h2>비용보다 먼저<br/>처리 기준을 적습니다.</h2><p>견적서에 보관·인계·폐기 범위가 구분돼야 작업 중 판단을 줄일 수 있습니다.</p></div><div className="estate-price-factors__list">{factors.map(([title,price,description])=><article key={title}><h3>{title}</h3><strong>{price}</strong><p>{description}</p></article>)}</div></div></section>
+  <section className="estate-price-story"><div className="container"><div><h2>현장에 없어도<br/>확인 과정은 남깁니다.</h2><ol><li><b>보관 기준 합의</b><span>찾아야 할 서류와 물품을 먼저 기록합니다.</span></li><li><b>공간별 분류</b><span>판단이 필요한 물품은 별도로 모읍니다.</span></li><li><b>사진 확인·인계</b><span>담당자 확인 후 보관품을 전달합니다.</span></li><li><b>반출·청소</b><span>합의된 물품만 처리하고 공간을 정리합니다.</span></li></ol></div><figure><Image alt="사진과 귀중품을 별도 상자에 보관하는 유품정리 분류 과정" fill sizes="(max-width:820px) 100vw,48vw" src="/generated/estate-clearing-hero-v1.png"/></figure></div></section>
+  <section className="section section--subtle"><div className="container waste-price-faq"><div><h2>견적 전<br/>자주 묻는 질문</h2></div><div>{faq.map(([q,a])=><details key={q}><summary>{q}</summary><p>{a}</p></details>)}</div></div></section>
+  <section className="waste-price-cta"><div className="container"><div><h2>정리 기준부터 조용히 상담합니다.</h2><p>전체 공간과 주요 수납공간 사진, 반드시 찾아야 할 물품을 함께 알려주세요.</p></div><Link className="button button--light" href="/estimate?service=estate-clearing">유품정리 비공개 견적</Link></div></section>
+</main>}

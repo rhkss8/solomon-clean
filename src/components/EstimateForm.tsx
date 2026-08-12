@@ -47,6 +47,12 @@ export function EstimateForm({ initialService }: { initialService?: ServiceSlug 
   const presetDeepContamination = presetService === "deep-cleaning" ? searchParams.get("contamination") ?? "" : "";
   const presetDeepSpace = presetService === "deep-cleaning" ? searchParams.get("space") ?? "" : "";
   const presetDeepPeriod = presetService === "deep-cleaning" ? searchParams.get("period") ?? "" : "";
+  const presetEstateSpace = presetService === "estate-clearing" ? searchParams.get("space") ?? "" : "";
+  const presetEstateVolume = presetService === "estate-clearing" ? searchParams.get("volume") ?? "" : "";
+  const presetEstateWork = presetService === "estate-clearing" ? searchParams.getAll("work").filter(Boolean) : [];
+  const presetOrganizingZones = presetService === "home-organizing" ? searchParams.getAll("zone").filter(Boolean) : [];
+  const presetOrganizingSize = presetService === "home-organizing" ? searchParams.get("size") ?? "" : "";
+  const presetOrganizingGoals = presetService === "home-organizing" ? searchParams.getAll("goal").filter(Boolean) : [];
   const presetAnswers: Answers = {
     ...(presetWasteType ? { wasteType: [presetWasteType] } : {}),
     ...(presetResidentialSize ? { size: presetResidentialSize } : {}),
@@ -57,6 +63,12 @@ export function EstimateForm({ initialService }: { initialService?: ServiceSlug 
     ...(presetDeepContamination ? { contamination: [presetDeepContamination] } : {}),
     ...(presetDeepSpace ? { space: presetDeepSpace } : {}),
     ...(presetDeepPeriod ? { period: presetDeepPeriod } : {}),
+    ...(presetEstateSpace ? { space: presetEstateSpace } : {}),
+    ...(presetEstateVolume ? { volume: presetEstateVolume } : {}),
+    ...(presetEstateWork.length ? { estateWork: presetEstateWork } : {}),
+    ...(presetOrganizingZones.length ? { organizingSpace: presetOrganizingZones } : {}),
+    ...(presetOrganizingSize ? { size: presetOrganizingSize } : {}),
+    ...(presetOrganizingGoals.length ? { goal: presetOrganizingGoals } : {}),
   };
   const presetQuestions = presetService ? getEstimateQuestions(presetService) : [];
   const presetStep = findNextUnansweredStep(presetQuestions, 0, presetAnswers);

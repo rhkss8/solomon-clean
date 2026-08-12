@@ -107,6 +107,38 @@ test("publishes an interactive special-cleaning price route", async () => {
   assert.match(sitemap, /prices-deep_clean/);
 });
 
+test("publishes an interactive estate-clearing price route", async () => {
+  const [page, calculator, categories, estimateForm, sitemap] = await Promise.all([
+    readFile(projectFile("app/prices-left/page.tsx"), "utf8"),
+    readFile(projectFile("src/components/EstateClearingPriceCalculator.tsx"), "utf8"),
+    readFile(projectFile("src/config/primary-service-categories.ts"), "utf8"),
+    readFile(projectFile("src/components/EstimateForm.tsx"), "utf8"),
+    readFile(projectFile("app/sitemap.ts"), "utf8"),
+  ]);
+  assert.match(page, /estate-clearing-hero-v1\.png/);
+  assert.match(page, /EstateClearingPriceCalculator/);
+  assert.match(calculator, /service: "estate-clearing"/);
+  assert.match(categories, /priceHref: "\/prices-left"/);
+  assert.match(estimateForm, /presetEstateWork/);
+  assert.match(sitemap, /prices-left/);
+});
+
+test("publishes an interactive home-organizing price route", async () => {
+  const [page, calculator, categories, estimateForm, sitemap] = await Promise.all([
+    readFile(projectFile("app/prices-tidyup/page.tsx"), "utf8"),
+    readFile(projectFile("src/components/HomeOrganizingPriceCalculator.tsx"), "utf8"),
+    readFile(projectFile("src/config/primary-service-categories.ts"), "utf8"),
+    readFile(projectFile("src/components/EstimateForm.tsx"), "utf8"),
+    readFile(projectFile("app/sitemap.ts"), "utf8"),
+  ]);
+  assert.match(page, /home-organizing-hero-v1\.png/);
+  assert.match(page, /HomeOrganizingPriceCalculator/);
+  assert.match(calculator, /service:"home-organizing"/);
+  assert.match(categories, /priceHref: "\/prices-tidyup"/);
+  assert.match(estimateForm, /presetOrganizingZones/);
+  assert.match(sitemap, /prices-tidyup/);
+});
+
 test("keeps the price directory aligned with the homepage quick menu", async () => {
   const { primaryServiceCategories } = await import("../src/config/primary-service-categories.ts");
 
