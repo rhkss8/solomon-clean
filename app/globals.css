@@ -322,15 +322,18 @@ h1, h2, h3, p { margin-top: 0; }
 
 /* Company */
 .company-page { background: #fff; }
-.company-hero { padding: 88px 0 76px; background: #17191c; color: white; }
-.company-hero__grid { display: grid; grid-template-columns: 1.35fr .65fr; align-items: end; gap: 90px; }
+.company-hero { overflow: hidden; padding: 72px 0; background: #17191c; color: white; }
+.company-hero__grid { display: grid; grid-template-columns: .92fr 1.08fr; align-items: center; gap: 64px; }
 .company-hero .eyebrow { color: #ff8d86; }
 .company-hero h1 { margin: 16px 0 22px; font-size: clamp(46px, 5vw, 68px); line-height: 1.08; letter-spacing: -.055em; }
 .company-hero p { max-width: 680px; margin: 0; color: #bdc3ca; font-size: 18px; line-height: 1.75; word-break: keep-all; }
-.company-hero dl { margin: 0; border-top: 1px solid #454a51; }
-.company-hero dl div { min-height: 70px; display: grid; grid-template-columns: 58px 1fr; align-items: center; gap: 16px; border-bottom: 1px solid #454a51; }
-.company-hero dt { color: #8f98a3; font-size: 12px; font-weight: 800; }
-.company-hero dd { margin: 0; color: #f4f5f6; font-size: 14px; font-weight: 750; }
+.company-hero__visual { position: relative; min-height: 430px; margin: 0; overflow: hidden; border-radius: 24px; background: #2a2d31; box-shadow: 0 28px 80px rgba(0,0,0,.28); }
+.company-hero__visual::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 58%, rgba(10,12,16,.72)); pointer-events: none; }
+.company-hero__visual img { object-fit: cover; transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+.company-hero__visual:hover img { transform: scale(1.035); }
+.company-hero__visual figcaption { position: absolute; z-index: 1; right: 24px; bottom: 22px; left: 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px; color: white; }
+.company-hero__visual figcaption strong { font-size: 12px; letter-spacing: .16em; }
+.company-hero__visual figcaption span { color: rgba(255,255,255,.76); font-size: 13px; }
 .company-intro .prose { max-width: 650px; }
 .company-intro .prose p { line-height: 1.85; }
 .company-principles { background: #f5f6f8; }
@@ -338,20 +341,20 @@ h1, h2, h3, p { margin-top: 0; }
 .company-principles__heading h2 { margin: 10px 0 14px; font-size: clamp(36px, 4.5vw, 54px); line-height: 1.16; letter-spacing: -.05em; }
 .company-principles__heading p { margin: 0; color: var(--text-secondary); }
 .company-principles__grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 2px solid #20242a; }
-.company-principles__grid article { min-height: 260px; padding: 28px 30px 32px 0; border-right: 1px solid #d5d9df; }
+.company-principles__grid article { position: relative; min-height: 300px; padding: 28px 30px 32px 0; border-right: 1px solid #d5d9df; }
 .company-principles__grid article + article { padding-left: 30px; }
 .company-principles__grid article:last-child { border-right: 0; }
-.company-principles__grid article > span { color: #3150f5; font-size: 12px; font-weight: 900; }
-.company-principles__grid h3 { margin: 72px 0 14px; font-size: 23px; letter-spacing: -.035em; }
+.company-principles__grid article > span { position: absolute; top: 33px; right: 28px; color: #3150f5; font-size: 12px; font-weight: 900; }
+.company-principles__icon { width: 64px; height: 64px; display: grid; place-items: center; border-radius: 18px; background: #e7ebff; color: #3150f5; }
+.company-principles__icon svg { width: 34px; height: 34px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.company-principles__grid h3 { margin: 54px 0 14px; font-size: 23px; letter-spacing: -.035em; }
 .company-principles__grid p { margin: 0; color: var(--text-secondary); font-size: 15px; line-height: 1.75; }
-.company-evidence .evidence-panel { border-radius: 18px; box-shadow: 0 18px 50px rgba(25,31,42,.06); }
 .company-cta { padding: 74px 0; background: #3150f5; color: white; }
 .company-cta .container { display: flex; align-items: center; justify-content: space-between; gap: 60px; }
 .company-cta .eyebrow { color: #dbe1ff; }
 .company-cta h2 { margin: 10px 0 0; font-size: clamp(30px, 3.8vw, 48px); line-height: 1.18; letter-spacing: -.05em; }
-.company-cta .container > div:last-child { min-width: 210px; display: grid; gap: 10px; }
-.company-cta a { min-height: 52px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.7); border-radius: 8px; color: white; font-weight: 850; }
-.company-cta a:last-child { border-color: white; background: white; color: #213abd; }
+.company-cta a { min-width: 210px; min-height: 56px; padding: 0 28px; display: grid; place-items: center; border-radius: 10px; background: white; color: #213abd; font-weight: 850; transition: transform .2s ease, box-shadow .2s ease; }
+.company-cta a:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(17,28,103,.24); }
 
 /* Conversion-led waste disposal landing */
 .waste-landing { overflow: clip; background: #fff; color: #101827; }
@@ -1305,16 +1308,17 @@ h1, h2, h3, p { margin-top: 0; }
   .company-hero__grid { gap: 38px; }
   .company-hero h1 { font-size: 40px; }
   .company-hero p { font-size: 16px; }
+  .company-hero__visual { min-height: 360px; border-radius: 18px; }
+  .company-hero__visual figcaption { right: 18px; bottom: 16px; left: 18px; }
   .company-principles__heading { margin-bottom: 34px; }
   .company-principles__heading h2 { font-size: 34px; }
   .company-principles__grid { grid-template-columns: 1fr; }
   .company-principles__grid article, .company-principles__grid article + article { min-height: 0; padding: 25px 0; border-right: 0; border-bottom: 1px solid #d5d9df; }
   .company-principles__grid h3 { margin: 28px 0 10px; font-size: 21px; }
-  .company-evidence .evidence-panel { padding: 24px; border-radius: 14px; }
   .company-cta { padding: 62px 0; }
   .company-cta .container { display: grid; gap: 34px; }
   .company-cta h2 { font-size: 32px; }
-  .company-cta .container > div:last-child { width: 100%; }
+  .company-cta a { width: 100%; }
   .quick-hero { min-height: auto; padding: 30px 0 62px; }
   .quick-hero > .container { width: calc(100% - 48px); }
   .quick-hero h1 { font-size: 24px; line-height: 1.25; }
