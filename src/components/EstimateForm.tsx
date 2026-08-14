@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { getEstimateQuestions, type EstimateQuestion } from "@/src/config/estimate/questions";
 import type { EstimateField } from "@/src/domain/estimate";
+import { formatFileSize, MAX_ESTIMATE_PHOTO_COUNT, optimizeEstimatePhoto } from "@/src/domain/photo-optimization";
 import { formatPhoneNumber, isServiceSlug, services, siteConfig, type ServiceSlug } from "@/src/domain/site";
 import { validateEstimatePhotos, type UploadedPhoto } from "@/src/server/photo-storage";
 
@@ -76,6 +77,10 @@ export function EstimateForm({ initialService }: { initialService?: ServiceSlug 
   const [step, setStep] = useState(presetStep);
   const [answers, setAnswers] = useState<Answers>(presetAnswers);
   const [photos, setPhotos] = useState<File[]>([]);
+  const [originalPhotoBytes, setOriginalPhotoBytes] = useState(0);
+  const [isOptimizingPhotos, setIsOptimizingPhotos] = useState(false);
+  const [optimizationProgress, setOptimizationProgress] = useState(0);
+  const [optimizationTotal, setOptimizationTotal] = useState(0);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [privacy, setPrivacy] = useState(false);
@@ -125,7 +130,26 @@ export function EstimateForm({ initialService }: { initialService?: ServiceSlug 
   function resetFlow() {
     const hasProgress = step > 0 || Object.keys(answers).length > 0 || Boolean(name || phone || photos.length);
     if (hasProgress && !window.confirm("입력한 내용을 모두 지우고 처음부터 다시 시작할까요?")) return;
-    clearAdvanceTimer(); setService(presetService); setStep(presetStep); setAnswers(presetAnswers); setPhotos([]); setName(""); setPhone(""); setPrivacy(false); setState("idle"); setMessage(""); setReference("");
+    clearAdvanceTimer(); setService(presetService); setStep(presetStep); setAnswers(presetAnswers); setPhotos([]); setOriginalPhotoBytes(0); setName(""); setPhone(""); setPrivacy(false); setState("idle"); setMessage(""); setReference("");
+  }
+
+  async function handlePhotoSelection(files: FileList | null) {
+    const selected = Array.from(files ?? []);
+    setMessage("");
+    if (selected.length > MAX_ESTIMATE_PHOTO_COUNT) { setMessage(`사진은 최대 ${MAX_ESTIMATE_PHOTO_COUNT}장까지 선택할 수 있습니다.`); return; }
+    if (!selected.length) { setPhotos([]); setOriginalPhotoBytes(0); return; }
+    setIsOptimizingPhotos(true); setOptimizationProgress(0); setOptimizationTotal(selected.length);
+    try {
+      const optimized: File[] = [];
+      for (const [index, file] of selected.entries()) {
+        optimized.push(await optimizeEstimatePhoto(file));
+        setOptimizationProgress(index + 1);
+      }
+      setOriginalPhotoBytes(selected.reduce((sum, file) => sum + file.size, 0));
+      setPhotos(optimized);
+    } catch (error) {
+      setPhotos([]); setOriginalPhotoBytes(0); setMessage(error instanceof Error ? error.message : "사진을 최적화하지 못했습니다.");
+    } finally { setIsOptimizingPhotos(false); setOptimizationTotal(0); }
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -168,11 +192,11 @@ export function EstimateForm({ initialService }: { initialService?: ServiceSlug 
 
         {isContactStep ? <form className="quote-question quote-contact" onSubmit={handleSubmit}>
           <h1>마지막으로 연락받을 정보를 알려주세요.</h1>
-          <label>현장 사진 <input accept="image/jpeg,image/png,image/webp" multiple onChange={(event) => setPhotos(Array.from(event.target.files ?? []))} type="file" /><small>{photos.length ? `${photos.length}장 선택됨` : "선택사항 · JPG, PNG, WebP 최대 8장"}</small></label>
+          <label>현장 사진 <input accept="image/*,.heic,.heif" disabled={isOptimizingPhotos} multiple onChange={(event) => void handlePhotoSelection(event.target.files)} type="file" /><small>{isOptimizingPhotos ? `${Math.min(optimizationProgress + 1, optimizationTotal)} / ${optimizationTotal}장 자동 최적화 중…` : photos.length ? `${photos.length}장 · ${formatFileSize(originalPhotoBytes)} → ${formatFileSize(photos.reduce((sum, file) => sum + file.size, 0))}로 축소됨` : "선택사항 · 휴대폰 원본 그대로 선택하면 자동으로 용량을 줄입니다 (최대 8장)"}</small></label>
           <div className="quote-contact__grid"><label>성함<input autoComplete="name" onChange={(event) => setName(event.target.value)} placeholder="성함" value={name} /></label><label>연락처<input autoComplete="tel" inputMode="tel" onChange={(event) => setPhone(event.target.value)} placeholder="010-0000-0000" value={phone} /></label></div>
           <label className="quote-contact__privacy"><input checked={privacy} onChange={(event) => setPrivacy(event.target.checked)} type="checkbox" /><span><Link href="/privacy" target="_blank">개인정보 수집 및 이용 안내</Link>를 확인했으며 상담 연락에 동의합니다.</span></label>
           {message ? <p className="form-error" role="alert">{message}</p> : null}
-          <button className="quote-contact__submit" disabled={state === "submitting"} type="submit">{state === "submitting" ? "접수 중…" : "무료견적 요청"}</button>
+          <button className="quote-contact__submit" disabled={state === "submitting" || isOptimizingPhotos} type="submit">{isOptimizingPhotos ? "사진 최적화 중…" : state === "submitting" ? "접수 중…" : "무료견적 요청"}</button>
         </form> : null}
       </>}
     </div>

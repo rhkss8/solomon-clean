@@ -8,7 +8,8 @@ export type EmailTransport = (input: RequestInfo | URL, init?: RequestInit) => P
 export type ResendNotifierConfig = { apiKey: string; from: string; to: string };
 
 function createNotificationText({ estimate, draft, photoCount }: EstimateNotification): string {
-  return [`새 견적 요청이 접수되었습니다.`, `접수번호: ${estimate.reference}`, `서비스: ${draft.service}`, `고객명: ${draft.name}`, `연락처: ${draft.phone}`, `지역: ${draft.area}`, `희망일: ${draft.preferredDate || "미정"}`, `사진: ${photoCount}장`, `현장 설명:`, draft.description].join("\n");
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://solomonclean.com").replace(/\/$/, "");
+  return [`새 견적 요청이 접수되었습니다.`, `접수번호: ${estimate.reference}`, `서비스: ${draft.service}`, `고객명: ${draft.name}`, `연락처: ${draft.phone}`, `지역: ${draft.area}`, `희망일: ${draft.preferredDate || "미정"}`, `사진: ${photoCount}장`, `현장 설명:`, draft.description, ``, `관리자에서 확인: ${siteUrl}/admin/estimates/${estimate.id}`].join("\n");
 }
 
 /** Sends a plain-text transactional notification through Resend's HTTPS API. */

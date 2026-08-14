@@ -21,7 +21,9 @@ export async function POST(request: Request) {
     const notifier = process.env.RESEND_API_KEY && process.env.ESTIMATE_FROM_EMAIL && process.env.ESTIMATE_NOTIFICATION_EMAIL
       ? new ResendEstimateNotifier({ apiKey: process.env.RESEND_API_KEY, from: process.env.ESTIMATE_FROM_EMAIL, to: process.env.ESTIMATE_NOTIFICATION_EMAIL })
       : new DisabledEstimateNotifier();
-    const notification = await notifier.notify({ estimate: stored, draft: validation.data, photoCount: photoValidation.photos.length });
+    let notification: { delivered: boolean; reason?: string; providerId?: string } = { delivered: false, reason: "notification_failed" };
+    try { notification = await notifier.notify({ estimate: stored, draft: validation.data, photoCount: photoValidation.photos.length }); }
+    catch (error) { console.error("estimate notification failed", { reference: stored.reference, error }); }
     return Response.json({ success: true, reference: stored.reference, notification: notification.delivered ? "sent" : "pending" }, { status: 201 });
   } catch (error) {
     console.error("estimate submission failed", error);
