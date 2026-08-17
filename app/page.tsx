@@ -2,7 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { BlogPostGrid } from "@/src/components/BlogPostGrid";
 import { CustomerReviewGrid } from "@/src/components/CustomerReviewGrid";
+import { ReviewShowcaseIllustration } from "@/src/components/ReviewShowcaseIllustration";
 import { ServiceQuickMenu } from "@/src/components/ServiceQuickMenu";
+import { SolomonTrustPanel } from "@/src/components/SolomonTrustPanel";
 import { StructuredData } from "@/src/components/StructuredData";
 import { formatPhoneNumber, services, siteConfig } from "@/src/domain/site";
 import { buildLocalBusinessSchema } from "@/src/domain/structured-data";
@@ -35,7 +37,7 @@ const workPairs = [
 ];
 
 export default async function HomePage() {
-  const [{ posts }, reviewResult] = await Promise.all([getBlogPosts(6), getCustomerReviews({ limit: 3 })]);
+  const [{ posts }, reviewResult] = await Promise.all([getBlogPosts(6), getCustomerReviews({ limit: 4 })]);
   return (
     <main className="home-v2">
       <StructuredData data={buildLocalBusinessSchema()} />
@@ -45,6 +47,7 @@ export default async function HomePage() {
           <h1>간편한 신청. <span>빠른 무료견적.</span></h1>
           <p>내가 찾던 청소·폐기·정리 서비스,<br className="mobile-only" /> 솔로몬종합청소에 다 있어요.</p>
           <ServiceQuickMenu />
+          <SolomonTrustPanel />
           <div className="quick-hero__actions">
             <Link href="/estimate">1분 무료견적 신청</Link>
             <Link href="/prices">비용 안내 보기</Link>
@@ -124,8 +127,14 @@ export default async function HomePage() {
 
       <section className="review-section section">
         <div className="container">
-          <div className="review-summary"><div><strong>고객의 말로<br />확인하는 서비스</strong><p>현재는 API 연결 전 예시 리뷰를 표시합니다. 실제 리뷰가 준비되면 같은 영역에 자동으로 반영됩니다.</p><Link className="review-summary__link" href="/reviews">고객 리뷰 전체 보기 →</Link></div><div><b>{reviewResult.total}개</b><span>준비된 예시 리뷰</span></div><div><b>전국</b><span>상담 가능</span></div></div>
-          <CustomerReviewGrid compact reviews={reviewResult.reviews} />
+          <ReviewShowcaseIllustration />
+          <div className="review-showcase__heading">
+            <span>생생한 리얼리뷰</span>
+            <h2>고객님들의<br /><strong>생생한 청소 리뷰 미리보기</strong></h2>
+            <p>실제 고객 후기 등록 전, 서비스 경험을 바탕으로 구성한 콘텐츠 예시입니다.</p>
+          </div>
+          <CustomerReviewGrid featured reviews={reviewResult.reviews} />
+          <Link className="review-showcase__link" href="/reviews">고객 리뷰 전체 보기</Link>
         </div>
       </section>
 

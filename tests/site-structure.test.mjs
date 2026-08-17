@@ -168,7 +168,7 @@ test("shares the customer review feed between the homepage and review directory"
     readFile(projectFile("app/sitemap.ts"), "utf8"),
   ]);
 
-  assert.match(homepage, /getCustomerReviews\(\{ limit: 3 \}\)/);
+  assert.match(homepage, /getCustomerReviews\(\{ limit: 4 \}\)/);
   assert.match(homepage, /CustomerReviewGrid/);
   assert.match(reviewsPage, /getCustomerReviews/);
   assert.match(reviewsPage, /예시 데이터/);
