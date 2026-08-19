@@ -1,5 +1,6 @@
+import { del } from "@vercel/blob";
 import { getDatabaseClient } from "@/db";
-import { normalizeEstimatePhotoKeys } from "@/src/domain/admin-estimate";
+import { isManagedEstimatePhotoKey, normalizeEstimatePhotoKeys } from "@/src/domain/admin-estimate";
 
 export const estimateStatuses = ["received", "reviewing", "contacted", "quoted", "scheduled", "completed", "cancelled"] as const;
 export type EstimateStatus = typeof estimateStatuses[number];
@@ -30,4 +31,11 @@ export async function getAdminEstimate(id: string) {
 
 export async function updateAdminEstimate(id: string, status: EstimateStatus, notes: string) {
   await getDatabaseClient().unsafe("UPDATE estimates SET status = $2, admin_notes = $3, updated_at = NOW() WHERE id = $1", [id, status, notes.slice(0, 5000)]);
+}
+
+export async function deleteAdminEstimate(id: string) {
+  const rows = await getDatabaseClient().unsafe("DELETE FROM estimates WHERE id = $1 RETURNING photo_keys", [id]);
+  const photoKeys = normalizeEstimatePhotoKeys((rows[0] as { photo_keys?: unknown } | undefined)?.photo_keys);
+  const estimatePhotoKeys = photoKeys.filter(isManagedEstimatePhotoKey);
+  await Promise.all(estimatePhotoKeys.map((key) => del(key).catch(() => undefined)));
 }

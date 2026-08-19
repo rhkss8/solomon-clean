@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ADMIN_SESSION_COOKIE, ADMIN_SESSION_MAX_AGE, createAdminSessionToken, validateAdminCredentials } from "@/src/server/admin-auth";
 import { getAdminSession } from "@/src/server/admin-session";
-import { isEstimateStatus, updateAdminEstimate } from "@/src/server/admin-estimates";
+import { deleteAdminEstimate, isEstimateStatus, updateAdminEstimate } from "@/src/server/admin-estimates";
 
 export async function loginAdmin(formData: FormData) {
   const email = String(formData.get("email") ?? "");
@@ -29,4 +29,12 @@ export async function saveEstimate(formData: FormData) {
   if (!/^[0-9a-f-]{36}$/i.test(id) || !isEstimateStatus(status)) redirect("/admin?error=invalid");
   await updateAdminEstimate(id, status, notes);
   redirect(`/admin/estimates/${id}?saved=1`);
+}
+
+export async function deleteEstimate(formData: FormData) {
+  if (!await getAdminSession()) redirect("/admin?error=session");
+  const id = String(formData.get("id") ?? "");
+  if (!/^[0-9a-f-]{36}$/i.test(id)) redirect("/admin?error=invalid");
+  await deleteAdminEstimate(id);
+  redirect("/admin?deleted=1");
 }

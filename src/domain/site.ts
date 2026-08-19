@@ -1,4 +1,5 @@
 import { contactConfig } from "../config/operations/contact.ts";
+import { formatKoreanPhoneNumber } from "./phone.ts";
 
 /**
  * Central brand and business configuration.
@@ -32,11 +33,9 @@ export const siteConfig = {
   },
 } as const;
 
-/** Formats a Korean mobile number for human-readable contact surfaces. */
+/** Formats a Korean contact number for human-readable contact surfaces. */
 export function formatPhoneNumber(phone: string) {
-  const digits = phone.replace(/\D/g, "");
-  const match = digits.match(/^(01\d)(\d{3,4})(\d{4})$/);
-  return match ? `${match[1]}-${match[2]}-${match[3]}` : phone;
+  return formatKoreanPhoneNumber(phone);
 }
 
 export type ServiceCategory =

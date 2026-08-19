@@ -1,1 +1,2 @@
 export function normalizeEstimatePhotoKeys(value: unknown): string[] { let current=value; for(let depth=0;depth<2&&typeof current==="string";depth++){try{current=JSON.parse(current);}catch{return [];}} return Array.isArray(current)?current.filter((item):item is string=>typeof item==="string"&&item.startsWith("estimates/")):[]; }
+export function isManagedEstimatePhotoKey(value: string) { return /^estimates\/[0-9a-f-]{36}\/[0-9a-f-]{36}\.(jpg|png|webp)$/i.test(value); }

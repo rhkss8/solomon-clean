@@ -1,0 +1,5 @@
+import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
+import { NextResponse } from "next/server";
+import { getAdminSession } from "@/src/server/admin-session";
+const uploadPath = /^work-cases\/[0-9a-f-]{36}\/(before|after)-[0-9a-f-]{36}\.webp$/i;
+export async function POST(request: Request) { if (!await getAdminSession()) return NextResponse.json({ error: "로그인이 필요합니다." }, { status: 401 }); try { const body = await request.json() as HandleUploadBody; const response = await handleUpload({ body, request, onBeforeGenerateToken: async (pathname) => { if (!uploadPath.test(pathname)) throw new Error("올바르지 않은 작업사진 경로입니다."); return { access: "private", allowedContentTypes: ["image/webp"], maximumSizeInBytes: 2 * 1024 * 1024, addRandomSuffix: false, allowOverwrite: false }; }, onUploadCompleted: async () => {} }); return NextResponse.json(response); } catch (error) { return NextResponse.json({ error: error instanceof Error ? error.message : "업로드하지 못했습니다." }, { status: 400 }); } }

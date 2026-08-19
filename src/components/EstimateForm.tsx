@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { getEstimateQuestions, type EstimateQuestion } from "@/src/config/estimate/questions";
 import type { EstimateField } from "@/src/domain/estimate";
+import { formatKoreanPhoneNumber, isValidKoreanPhoneNumber } from "@/src/domain/phone";
 import { formatFileSize, MAX_ESTIMATE_PHOTO_COUNT, optimizeEstimatePhoto } from "@/src/domain/photo-optimization";
 import { formatPhoneNumber, isServiceSlug, services, siteConfig, type ServiceSlug } from "@/src/domain/site";
 import { validateEstimatePhotos, type UploadedPhoto } from "@/src/server/photo-storage";
@@ -96,6 +97,9 @@ export function EstimateForm({ initialService }: { initialService?: ServiceSlug 
   const currentAnswer = currentQuestion ? answers[currentQuestion.id] : undefined;
 
   useEffect(() => () => { if (advanceTimer.current) window.clearTimeout(advanceTimer.current); }, []);
+  useEffect(() => {
+    if (state === "success") window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [state]);
 
   function clearAdvanceTimer() {
     if (advanceTimer.current) window.clearTimeout(advanceTimer.current);
@@ -154,7 +158,7 @@ export function EstimateForm({ initialService }: { initialService?: ServiceSlug 
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (name.trim().length < 2 || !/^0\d{9,10}$/.test(phone.replace(/\D/g, "")) || !privacy) { setMessage("성함, 연락처와 개인정보 동의를 확인해주세요."); return; }
+    if (name.trim().length < 2 || !isValidKoreanPhoneNumber(phone) || !privacy) { setMessage("성함, 연락처와 개인정보 동의를 확인해주세요."); return; }
     setState("submitting"); setMessage("");
     const photoValidation = validateEstimatePhotos(photos);
     if (!photoValidation.success) { setMessage(photoValidation.message); setState("error"); return; }
@@ -193,7 +197,7 @@ export function EstimateForm({ initialService }: { initialService?: ServiceSlug 
         {isContactStep ? <form className="quote-question quote-contact" onSubmit={handleSubmit}>
           <h1>마지막으로 연락받을 정보를 알려주세요.</h1>
           <label>현장 사진 <input accept="image/*,.heic,.heif" disabled={isOptimizingPhotos} multiple onChange={(event) => void handlePhotoSelection(event.target.files)} type="file" /><small>{isOptimizingPhotos ? `${Math.min(optimizationProgress + 1, optimizationTotal)} / ${optimizationTotal}장 자동 최적화 중…` : photos.length ? `${photos.length}장 · ${formatFileSize(originalPhotoBytes)} → ${formatFileSize(photos.reduce((sum, file) => sum + file.size, 0))}로 축소됨` : "선택사항 · 휴대폰 원본 그대로 선택하면 자동으로 용량을 줄입니다 (최대 8장)"}</small></label>
-          <div className="quote-contact__grid"><label>성함<input autoComplete="name" onChange={(event) => setName(event.target.value)} placeholder="성함" value={name} /></label><label>연락처<input autoComplete="tel" inputMode="tel" onChange={(event) => setPhone(event.target.value)} placeholder="010-0000-0000" value={phone} /></label></div>
+          <div className="quote-contact__grid"><label>성함<input autoComplete="name" onChange={(event) => setName(event.target.value)} placeholder="성함" value={name} /></label><label>연락처<input autoComplete="tel" inputMode="numeric" maxLength={14} onChange={(event) => setPhone(formatKoreanPhoneNumber(event.target.value))} pattern="[0-9-]*" placeholder="010-0000-0000" type="tel" value={phone} /></label></div>
           <label className="quote-contact__privacy"><input checked={privacy} onChange={(event) => setPrivacy(event.target.checked)} type="checkbox" /><span><Link href="/privacy" target="_blank">개인정보 수집 및 이용 안내</Link>를 확인했으며 상담 연락에 동의합니다.</span></label>
           {message ? <p className="form-error" role="alert">{message}</p> : null}
           <button className="quote-contact__submit" disabled={state === "submitting" || isOptimizingPhotos} type="submit">{isOptimizingPhotos ? "사진 최적화 중…" : state === "submitting" ? "접수 중…" : "무료견적 요청"}</button>

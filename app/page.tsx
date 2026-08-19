@@ -3,6 +3,7 @@ import Link from "next/link";
 import { BlogPostGrid } from "@/src/components/BlogPostGrid";
 import { CustomerReviewGrid } from "@/src/components/CustomerReviewGrid";
 import { ReviewShowcaseIllustration } from "@/src/components/ReviewShowcaseIllustration";
+import { WorkCaseGrid } from "@/src/components/WorkCaseGrid";
 import { ServiceQuickMenu } from "@/src/components/ServiceQuickMenu";
 import { SolomonTrustPanel } from "@/src/components/SolomonTrustPanel";
 import { StructuredData } from "@/src/components/StructuredData";
@@ -11,12 +12,14 @@ import { buildLocalBusinessSchema } from "@/src/domain/structured-data";
 import { createPageMetadata } from "@/src/lib/metadata";
 import { getBlogPosts } from "@/src/server/blog-feed";
 import { getCustomerReviews } from "@/src/server/customer-review-feed";
+import { listPublishedWorkCases } from "@/src/server/work-cases";
 
 export const metadata = createPageMetadata({
   title: "전국 청소·폐기물·정리 무료견적",
   description: siteConfig.description,
   path: "/",
 });
+export const dynamic = "force-dynamic";
 
 const assurances = [
   ["사진부터 확인", "현장 사진과 기본 조건을 먼저 확인해 필요한 범위를 안내합니다."],
@@ -30,14 +33,8 @@ const concerns = [
   ["문제가 생기면 누가 대응하나요?", "상담부터 작업 확인까지 한 곳에서 소통해 책임 주체가 흐려지지 않게 합니다."],
 ];
 
-const workPairs = [
-  ["/blog-images/223234046342.jpg", "/blog-images/223234110284.jpg", "쓰레기집 청소"],
-  ["/blog-images/223235919143.jpg", "/blog-images/223235940657.jpg", "폐기물 정리"],
-  ["/blog-images/223238169925.jpg", "/blog-images/223238397121.jpg", "입주·거주 청소"],
-];
-
 export default async function HomePage() {
-  const [{ posts }, reviewResult] = await Promise.all([getBlogPosts(6), getCustomerReviews({ limit: 4 })]);
+  const [{ posts }, reviewResult, workCases] = await Promise.all([getBlogPosts(6), getCustomerReviews({ limit: 4 }), listPublishedWorkCases(3)]);
   return (
     <main className="home-v2">
       <StructuredData data={buildLocalBusinessSchema()} />
@@ -119,9 +116,7 @@ export default async function HomePage() {
       <section className="proof-section section">
         <div className="container">
           <div className="proof-section__intro"><span>RESULT</span><h2>말보다 작업 결과로<br />확인해보세요.</h2><p>현장의 상태와 작업 범위는 모두 다릅니다. 실제 작업 기록을 통해 솔로몬종합청소의 현장 대응 방식을 확인하세요.</p><Link href="/portfolio">작업사례 전체 보기 →</Link></div>
-          <div className="before-after-grid">
-            {workPairs.map(([before, after, title]) => <article key={title}><div className="before-after-grid__images"><figure><Image src={before} alt={`${title} 작업 전`} fill sizes="(max-width: 600px) 43vw, 260px" /><span>BEFORE</span></figure><figure><Image src={after} alt={`${title} 작업 후`} fill sizes="(max-width: 600px) 43vw, 260px" /><span>AFTER</span></figure></div><h3>{title}</h3></article>)}
-          </div>
+          <WorkCaseGrid cases={workCases} compact />
         </div>
       </section>
 
