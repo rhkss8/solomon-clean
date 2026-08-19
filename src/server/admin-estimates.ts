@@ -1,4 +1,5 @@
 import { getDatabaseClient } from "@/db";
+import { normalizeEstimatePhotoKeys } from "@/src/domain/admin-estimate";
 
 export const estimateStatuses = ["received", "reviewing", "contacted", "quoted", "scheduled", "completed", "cancelled"] as const;
 export type EstimateStatus = typeof estimateStatuses[number];
@@ -23,7 +24,8 @@ export async function listAdminEstimates(status?: string, query?: string) {
 
 export async function getAdminEstimate(id: string) {
   const rows = await getDatabaseClient().unsafe("SELECT * FROM estimates WHERE id = $1 LIMIT 1", [id]);
-  return (rows[0] as unknown as AdminEstimate | undefined) ?? null;
+  const estimate=(rows[0] as unknown as AdminEstimate | undefined)??null;
+  return estimate?{...estimate,photo_keys:normalizeEstimatePhotoKeys(estimate.photo_keys)}:null;
 }
 
 export async function updateAdminEstimate(id: string, status: EstimateStatus, notes: string) {
