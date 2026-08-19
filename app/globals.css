@@ -1775,8 +1775,8 @@ body:has(.admin-root) > .mobile-contact-bar { display:none; }
 .admin-alert { margin:0 0 20px; padding:12px 14px; border:1px solid #f2c1bd; border-radius:8px; background:#fff0ef; color:#a12e25; font-size:13px; }
 .admin-topbar { height:72px; padding:0 28px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #dde2e9; background:#fff; }
 .admin-topbar form button { border:0; background:transparent; color:#5e6876; cursor:pointer; }
-.admin-case-entry { position:fixed; z-index:20; top:17px; right:104px; min-height:38px; padding:0 13px; display:flex; align-items:center; border:1px solid #d3d9e1; border-radius:7px; background:#fff; color:#3150f5; font-size:12px; font-weight:850; }
 .admin-workspace { min-height:calc(100vh - 72px); display:grid; grid-template-columns:230px 1fr; }
+.admin-main { min-width:0; }
 .admin-workspace > aside { padding:32px 22px; border-right:1px solid #dde2e9; background:#fff; }
 .admin-workspace > aside > strong { color:#8a93a0; font-size:11px; letter-spacing:.08em; }
 .admin-workspace nav { margin-top:14px; }
@@ -1879,6 +1879,5 @@ body:has(.admin-root) > .mobile-contact-bar { display:none; }
   .review-showcase__card p { font-size: 11px; line-height: 1.5; }
   .review-showcase__card footer { align-items: flex-end; flex-direction: column; gap: 2px; font-size: 9px; }
 }
-@media(max-width:520px){.admin-case-entry{right:76px;padding:0 9px;font-size:11px}}
 @media(max-width:850px){.admin-case-list>a{grid-template-columns:150px 1fr}.admin-case-list__state{grid-column:2;grid-row:2;display:flex;justify-items:start}.admin-case-images{grid-template-columns:1fr}.work-case-grid{grid-template-columns:1fr}}
 @media(max-width:520px){.admin-case-list>a{grid-template-columns:96px 1fr;gap:14px}.admin-case-list__photos{height:84px}.admin-case-editor{padding:16px}.admin-case-fields{grid-template-columns:1fr}.admin-case-fields__wide{grid-column:auto}.admin-case-images label,.admin-case-images img,.admin-case-images i{min-height:230px}.work-case-grid figure,.work-case-grid--compact figure{height:190px}}
